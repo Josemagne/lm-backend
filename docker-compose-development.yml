@@ -1,0 +1,21 @@
+version: "3.9"
+
+# Our services
+services:
+  lm-backend:
+    container_name: lm-backend
+    # Where we find the Dockerfile
+    build:
+      context: ./
+      dockerfile: Dockerfile.development
+    ports:
+      - "3000:3000"
+
+  lm-backend-db:
+    image: "postgres:13"
+    container_name: lm-backend-db
+    depends_on:
+      - lm-backend
+    ports:
+      - "5432:5432"
+    env_file: .env
