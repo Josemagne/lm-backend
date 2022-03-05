@@ -1,23 +1,38 @@
-import express, { Request, Response } from "express";
-import logger from './utils/logger';
-import pino from "pino-http";
+import "reflect-metadata";
+import { createConnection } from "typeorm";
+import * as express from "express";
+import * as bodyParser from "body-parser";
+import { Request, Response } from "express";
+import { Routes } from "./routes";
+import { User } from "./entity/User";
+import pino from 'pino-http';
 
-// Get the port from env
-const port = process.env.PORT_SERVER_DEVELOPMENT || 3000;
+createConnection().then(async connection => {
+
+    // create express app
+    const app = express();
+    app.use(bodyParser.json());
+    app.use(pino)
 
 
-/**
- * Main app
- */
-const app = express();
+    // setup express app here
+    // ...
 
-/* MIDDLEWARE */
-app.use(pino);
+    // start express server
+    app.listen(4000);
 
-app.get("/", (req: Request, res: Response) => {
-    res.status(200).json({ msg: "nice" })
-})
+    // insert new users for test
+    await connection.manager.save(connection.manager.create(User, {
+        firstName: "Timber",
+        lastName: "Saw",
+        age: 27
+    }));
+    await connection.manager.save(connection.manager.create(User, {
+        firstName: "Phantom",
+        lastName: "Assassin",
+        age: 24
+    }));
 
-app.listen(port, () => {
-    logger.info(`The server is listening on port ${port}`)
-})
+    console.log("Express server has started on port 3000. Open http://localhost:3000/users to see results");
+
+}).catch(error => console.log(error));

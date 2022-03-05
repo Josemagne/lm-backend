@@ -1,14 +1,14 @@
-version: "3.8"
+version: "3.7"
 
 # Our services
 services:
   lm-backend:
-    image: node:17
     container_name: lm-backend
-    # Where we find the Dockerfile
+    image: lm-backend
     depends_on:
       - lm-backend-db
     build:
+      # Where we find the Dockerfile
       context: ./
       dockerfile: Dockerfile.development
     ports:
@@ -39,7 +39,3 @@ services:
 networks:
   lm-network:
     driver: bridge
-
-volumes:
-  - pgdata:
-  - node_modules:
