@@ -1,21 +1,45 @@
-version: "3.9"
+version: "3.8"
 
 # Our services
 services:
   lm-backend:
+    image: node:17
     container_name: lm-backend
     # Where we find the Dockerfile
+    depends_on:
+      - lm-backend-db
     build:
       context: ./
       dockerfile: Dockerfile.development
     ports:
       - "3000:3000"
+    # env_file: .env
+    environment:
+      - POSTGRES_HOST=lm-backend-db
+      - POSTGRES_USER=josemagne
+      - POSTGRES_PASSWORD=josemagne
+      - POSTGRES_DB=librimem
+    volumes:
+      - "./:/app"
+      - "./node_modules:/app/node_modules"
+    networks:
+      - lm-network
 
   lm-backend-db:
     image: "postgres:13"
     container_name: lm-backend-db
-    depends_on:
-      - lm-backend
     ports:
       - "5432:5432"
+    volumes:
+      - "./pgdata:/var/lib/postgresql/data"
     env_file: .env
+    networks:
+      - lm-network
+
+networks:
+  lm-network:
+    driver: bridge
+
+volumes:
+  - pgdata:
+  - node_modules:
