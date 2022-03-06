@@ -12,13 +12,14 @@ services:
       context: ./
       dockerfile: Dockerfile.development
     ports:
-      - "3000:3000"
+      - "4000:4000"
     # env_file: .env
     environment:
-      - POSTGRES_HOST=lm-backend-db
-      - POSTGRES_USER=josemagne
-      - POSTGRES_PASSWORD=josemagne
-      - POSTGRES_DB=librimem
+      - POSTGRES_HOST: lm-backend-db
+      - POSTGRES_USER: josemagne
+      - POSTGRES_PASSWORD: josemagne
+      - POSTGRES_DB: librimem
+      - NODE_ENV: development
     volumes:
       - "./:/app"
       - "./node_modules:/app/node_modules"
@@ -28,8 +29,6 @@ services:
   lm-backend-db:
     image: "postgres:13"
     container_name: lm-backend-db
-    ports:
-      - "5432:5432"
     volumes:
       - "./pgdata:/var/lib/postgresql/data"
     env_file: .env

@@ -1,38 +1,64 @@
 import "reflect-metadata";
 import { createConnection } from "typeorm";
-import * as express from "express";
 import * as bodyParser from "body-parser";
-import { Request, Response } from "express";
+import express, { Request, Response } from "express";
 import { Routes } from "./routes";
 import { User } from "./entity/User";
 import pino from 'pino-http';
+// NOTE Entities
+import Book from "./entity/Book";
+import Chapter from "./entity/Chapter";
+import logger from './utils/logger';
+import { Author } from './entity/Author';
+import BookController from './controllers/book.controller';
+import bookRouter from './routes/book.router';
 
-createConnection().then(async connection => {
+let port: number = 0;
+/**
+ * Decides if we synchronize the entities with db
+ */
+let synchronize: boolean = false;
+
+// Get the port
+if (process.env.NODE_ENV === "development") {
+    port = 4000;
+    synchronize = true;
+} else {
+    port = 4000
+}
+
+// TODO Pass the parameters from .env to createConnection()
+createConnection({
+    type: "postgres",
+    host: "lm-backend-db",
+    port: 5432,
+    username: process.env.POSTGRES_USER,
+    password: process.env.POSTGRES_PASSWORD,
+    database: "librimem",
+    entities: [Book, Chapter, Author],
+    synchronize: synchronize
+}).then(async connection => {
+
 
     // create express app
     const app = express();
     app.use(bodyParser.json());
-    app.use(pino)
+    app.use(pino())
 
 
-    // setup express app here
-    // ...
+    // TODO Move to routers
+    app.get("/", (req: Request, res: Response) => {
+        res.status(200).json({ msg: "yes, it works" })
+    })
+
+    /* Book routes */
+    app.use("/books", bookRouter);
+
+
 
     // start express server
-    app.listen(4000);
-
-    // insert new users for test
-    await connection.manager.save(connection.manager.create(User, {
-        firstName: "Timber",
-        lastName: "Saw",
-        age: 27
-    }));
-    await connection.manager.save(connection.manager.create(User, {
-        firstName: "Phantom",
-        lastName: "Assassin",
-        age: 24
-    }));
-
-    console.log("Express server has started on port 3000. Open http://localhost:3000/users to see results");
+    app.listen(port, () => {
+        console.log(`Server is listening on port ${port}`)
+    })
 
 }).catch(error => console.log(error));
