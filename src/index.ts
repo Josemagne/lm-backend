@@ -4,6 +4,7 @@ import * as bodyParser from "body-parser";
 import express, { Request, Response } from "express";
 import { Routes } from "./routes";
 import { User } from "./entity/User";
+import cors from "cors";
 import pino from 'pino-http';
 // NOTE Entities
 import Book from "./entity/Book";
@@ -44,6 +45,8 @@ createConnection({
     const app = express();
     app.use(bodyParser.json());
     app.use(pino())
+    // NOTE cors
+    app.use(cors())
 
 
     // TODO Move to routers
