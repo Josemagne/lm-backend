@@ -6,14 +6,9 @@ export declare interface LM_Book {
      */
     book_id: string;
     /**
-     * The name of the author
-     * If the author name is not known then we use "unknown"
+     * Full name of the author
      */
-    author_name: string;
-    /**
-     * The prename of the author
-     */
-    author_prename: string;
+    author: string;
     book_title: string;
     /**
      * Number of pages
@@ -27,8 +22,10 @@ export declare interface LM_Book {
      * A number between 1 and 100 that indicates how far we have gotten with the book.
      */
     progress: number;
-    chapter: LM_Chapter[];
+    chapters: LM_Chapter[];
     summary: string;
-    started: Date;
-    ended: Date;
+    /**
+     * Number between 1 and 5 for stars.
+     */
+    rate: number;
 }

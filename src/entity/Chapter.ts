@@ -1,8 +1,9 @@
 import { Entity, BaseEntity, Column, PrimaryColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
 import Book from './Book';
+import LM_Chapter from '../types/Book/chapter';
 
 @Entity("chapter")
-export default class Chapter {
+export default class Chapter extends BaseEntity {
 
     @PrimaryColumn({})
     chapter_id: string;

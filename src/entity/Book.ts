@@ -10,12 +10,6 @@ export default class Book extends BaseEntity {
     book_id: string;
 
     @Column()
-    author_prename: string;
-
-    @Column()
-    author_name: string;
-
-    @Column()
     book_title: string;
 
     @Column()
@@ -35,12 +29,12 @@ export default class Book extends BaseEntity {
     ended: Date;
 
     @Column({ type: "simple-array" })
-    chapters: Chapter[];
+    chapters: Chapter;
 
     @OneToMany(() => Chapter, (chapter) => chapter.chapter_id)
 
     @ManyToMany(() => Author)
-    author: Author[];
+    author: Author;
 
     @JoinColumn({ name: "chapter_id" })
     chapter: Chapter;
