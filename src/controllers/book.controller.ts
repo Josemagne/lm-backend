@@ -1,38 +1,30 @@
-import { getRepository } from "typeorm";
+import { getRepository, createConnection, getManager } from 'typeorm';
 import { Request, Response, NextFunction } from "express";
 import Book from "../entity/Book";
 import logger from '../utils/logger';
 import { LM_Book } from "src/types/Book/book";
 
-/**
- * Controller for the books
- */
-export default class BookController {
 
 
-    // TODO Add midleware
-    public static async save(req: Request<{}, {}, LM_Book>, res: Response, next: NextFunction) {
-        const { author, book_title, book_id, chapters, pages, progress, rate, read, summary } = req.body;
+// TODO Add midleware
+const save = async (req: Request<{}, {}, LM_Book>, res: Response, next: NextFunction) => {
+    const book = new Book();
+    Object.assign(book, req.body);
+    const bookRepository = getManager().getRepository(Book);
+    await bookRepository.save(book);
+    logger.debug("Going to insert: ", req.body)
 
-        const book = Book.create({
-            author: author
-        });
-
-
-        const bookRepository = getRepository(Book);
-        return bookRepository.save(req.body).then((res) => {
-            logger.info("Added book to database")
-            return res;
-        })
-    }
-
-    public static async getAll(req: Request, res: Response, next: NextFunction) {
-        const bookRepository = getRepository(Book);
-        return bookRepository.save(req.body).then((res) => {
-            logger.info("Returned all books from database.")
-            return res;
-        })
-    }
+    return res.status(200).json({ msg: "Book inserted into database" })
 
 }
 
+const getAll = async (req: Request, res: Response, next: NextFunction) => {
+    const books = await getRepository(Book).createQueryBuilder("SELECT * FROM books").getMany();
+
+    logger.info("Returned all books from database.")
+
+    return res.status(200).json(books);
+}
+
+
+export { save, getAll } 
