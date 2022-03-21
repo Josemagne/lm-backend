@@ -47,6 +47,7 @@ createConnection({
     app.use(pino())
     // NOTE cors
     app.use(cors())
+    app.use(express.urlencoded({ extended: true }))
 
 
     // TODO Move to routers

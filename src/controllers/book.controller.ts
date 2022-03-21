@@ -19,12 +19,21 @@ const save = async (req: Request<{}, {}, LM_Book>, res: Response, next: NextFunc
 }
 
 const getAll = async (req: Request, res: Response, next: NextFunction) => {
-    const books = await getRepository(Book).createQueryBuilder("SELECT * FROM books").getMany();
+    const books = await getRepository(Book).manager.find(Book);
 
     logger.info("Returned all books from database.")
 
     return res.status(200).json(books);
 }
 
+const removeBook = async (req: Request, res: Response, next: NextFunction) => {
+    /**
+     * Id of the book
+     */
+    const id = req.params.bookId;
+    // await getRepository(Book).manager.createQueryBuilder().delete().where("book_id = :id", { id: id })
+    await getRepository(Book).delete(id)
+}
 
-export { save, getAll } 
+
+export { save, getAll, removeBook } 
