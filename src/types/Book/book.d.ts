@@ -1,4 +1,4 @@
-import type LM_Chapter from "./chapter";
+import LM_Chapter from "./chapter";
 
 export declare interface LM_Book {
     /**

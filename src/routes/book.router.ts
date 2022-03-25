@@ -1,4 +1,4 @@
-import express, { Request, Response } from "express"
+import express from "express"
 import { save, getAll, removeBook } from '../controllers/book.controller';
 
 // Get the router instance

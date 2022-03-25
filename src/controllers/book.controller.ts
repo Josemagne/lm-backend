@@ -1,3 +1,5 @@
+
+// @ts-nocheck
 import { getRepository, createConnection, getManager } from 'typeorm';
 import { Request, Response, NextFunction } from "express";
 import Book from "../entity/Book";

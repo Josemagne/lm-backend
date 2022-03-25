@@ -1,0 +1,16 @@
+FROM node:17-alpine3.14
+WORKDIR /usr/src/app
+COPY . .
+RUN npm install yarn
+RUN yarn install
+
+FROM node:17-alpine3.14
+WORKDIR /usr/src/app
+# COPY . .
+RUN npm install yarn
+# RUN yarn
+COPY --from=0 /usr/src/app/build ./build
+COPY package.json ./package.json
+RUN yarn install --production
+EXPOSE 4000
+CMD npm start

@@ -1,7 +1,5 @@
 import { Entity, BaseEntity, PrimaryColumn, Column, ManyToMany, JoinTable } from 'typeorm';
 import Book from './Book';
-import { LM_Author } from 'src/types/Book/author';
-import { LM_Book } from 'src/types/Book/book';
 
 @Entity("authors")
 export class Author extends BaseEntity {

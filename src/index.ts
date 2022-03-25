@@ -1,18 +1,16 @@
 import "reflect-metadata";
 import { createConnection } from "typeorm";
 import * as bodyParser from "body-parser";
-import express, { Request, Response } from "express";
-import { Routes } from "./routes";
-import { User } from "./entity/User";
+import express from "express";
 import cors from "cors";
 import pino from 'pino-http';
 // NOTE Entities
 import Book from "./entity/Book";
 import Chapter from "./entity/Chapter";
-import logger from './utils/logger';
 import { Author } from './entity/Author';
-import BookController from './controllers/book.controller';
 import bookRouter from './routes/book.router';
+import { join } from "path";
+import chapterRouter from './routes/chapter.router';
 
 let port: number = 0;
 /**
@@ -38,6 +36,7 @@ createConnection({
     database: "librimem",
     entities: [Book, Chapter, Author],
     synchronize: synchronize
+    // @ts-ignore
 }).then(async connection => {
 
 
@@ -48,16 +47,43 @@ createConnection({
     // NOTE cors
     app.use(cors())
     app.use(express.urlencoded({ extended: true }))
+    // NOTE Serves "/"
 
+    const dev = join(__dirname, "..", "build", "assets")
 
-    // TODO Move to routers
-    app.get("/", (req: Request, res: Response) => {
-        res.status(200).json({ msg: "yes, it works" })
-    })
+    const prod = join(__dirname, "assets");
+
+    if (process.env.NODE_ENV === "production") {
+
+        app.use(express.static(prod))
+    }
+    else {
+        app.use(express.static(dev))
+    }
 
     /* Book routes */
     app.use("/books", bookRouter);
+    app.use("/chapters", chapterRouter);
 
+    // @ts-ignore
+    app.get('/*', function (req, res) {
+        if (process.env.NODE_ENV === "production") {
+
+            res.sendFile(join(prod), function (err) {
+                if (err) {
+                    res.status(500).send(err)
+                }
+            })
+        }
+        else {
+            res.sendFile(dev, function (err) {
+                if (err) {
+                    res.status(500).send(err);
+                }
+            })
+        }
+
+    })
 
 
     // start express server
