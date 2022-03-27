@@ -1,5 +1,5 @@
 import express from "express"
-import { save, getAll, removeBook } from '../controllers/book.controller';
+import { save, getAll, removeBook, updateBook } from '../controllers/book.controller';
 
 // Get the router instance
 const bookRouter = express.Router();
@@ -13,5 +13,5 @@ const bookRouter = express.Router();
 // })
 
 bookRouter.route("/").get(getAll).post(save);
-bookRouter.route("/:bookId").delete(removeBook)
+bookRouter.route("/:bookId").delete(removeBook).post(updateBook)
 export default bookRouter;

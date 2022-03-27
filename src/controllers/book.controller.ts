@@ -28,6 +28,14 @@ const getAll = async (req: Request, res: Response, next: NextFunction) => {
     return res.status(200).json(books);
 }
 
+const updateBook = async (req: Request<{}, {}, Book>, res: Response, next: NextFunction) => {
+    const updatedBook = req.body;
+
+    await getRepository(Book).update(updateBook.book_id, updateBook);
+
+    res.status(200).json({ msg: updateBook });
+}
+
 const removeBook = async (req: Request, res: Response, next: NextFunction) => {
     /**
      * Id of the book
@@ -35,7 +43,11 @@ const removeBook = async (req: Request, res: Response, next: NextFunction) => {
     const id = req.params.bookId;
     // await getRepository(Book).manager.createQueryBuilder().delete().where("book_id = :id", { id: id })
     await getRepository(Book).delete(id)
+
+    logger.info("Updated book")
+
+    res.status(200).json({ msg: "Book deleted" });
 }
 
 
-export { save, getAll, removeBook } 
+export { save, getAll, removeBook, updateBook } 

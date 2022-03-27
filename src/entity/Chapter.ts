@@ -93,11 +93,11 @@ export default class Chapter extends BaseEntity {
     })
     ended: Date | null;
 
+    @ManyToOne(() => Book, (book) => book.chapters, {
+        onDelete: "CASCADE"
+    })
 
-
-    @ManyToOne(() => Book, (book) => book.chapter)
-
-    @JoinColumn({ name: "book_id" })
+    @JoinColumn({ name: "JoinColumn_book_chapter" })
     book: Book;
 
 }

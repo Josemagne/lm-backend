@@ -13,6 +13,7 @@ const saveChapter = async (req: Request, res: Response, next: NextFunction) => {
     logger.info(req.body)
 
     const chapter = new Chapter();
+    // NOTE Assigns the enumerable props of req.body to chapter!!!
     Object.assign(chapter, req.body);
     const chapterRepository = getManager().getRepository(Chapter);
     await chapterRepository.save(chapter);
@@ -23,4 +24,18 @@ const saveChapter = async (req: Request, res: Response, next: NextFunction) => {
 
 }
 
-export { saveChapter };
+const updateChapter = async (req: Request, res: Response, next: NextFunction) => {
+
+    const chapterId = req.params.chapterId;
+    const chapter = new Chapter();
+    Object.assign(chapter, req.body);
+
+    const chapterRepository = getManager().getRepository(Chapter);
+    await chapterRepository.update(chapter.chapter_id, chapter);
+
+    logger.info("Updated chpater")
+
+    res.status(200).json(req.body);
+}
+
+export { saveChapter, updateChapter };
