@@ -1,0 +1,19 @@
+name: Release
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - name: build
+        run: |
+          docker login -u josemagne/librimem-backend-books --password ${{secrets.DOCKER_TOKEN}}
+          docker build . -t josemagne/librimem-backend-books
+          docker push josemagne/librimem-backend-books
