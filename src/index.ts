@@ -12,6 +12,7 @@ import bookRouter from './routes/book.router';
 import { join } from "path";
 import chapterRouter from './routes/chapter.router';
 
+
 let port: number = 0;
 /**
  * Decides if we synchronize the entities with db

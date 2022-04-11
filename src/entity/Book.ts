@@ -1,7 +1,6 @@
-import { Entity, BaseEntity, Column, PrimaryColumn, CreateDateColumn, UpdateDateColumn, OneToMany, JoinColumn, ManyToMany } from "typeorm";
+import { Entity, BaseEntity, Column, PrimaryColumn, CreateDateColumn, UpdateDateColumn, OneToMany, ManyToMany } from "typeorm";
 import Chapter from './Chapter';
 import { Author } from './Author';
-import { LM_Book_Contents } from "src/types/Book/contents";
 
 @Entity("books")
 export default class Book extends BaseEntity {
@@ -20,7 +19,7 @@ export default class Book extends BaseEntity {
     read: boolean;
 
     @Column({ type: "json", nullable: true, default: {} })
-    contents: LM_Book_Contents;
+    contents: {};
 
     @Column()
     progress: number;
