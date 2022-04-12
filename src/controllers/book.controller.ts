@@ -8,18 +8,55 @@ import { LM_Book } from "src/types/Book/book";
 
 
 
-// TODO Add midleware
+/**
+ * Add book to database
+ * @param req 
+ * @param res 
+ * @param next 
+ * @version 1.0.0
+ * @returns 
+ */
 const save = async (req: Request<{}, {}, LM_Book>, res: Response, next: NextFunction) => {
     const book = new Book();
     Object.assign(book, req.body);
     const bookRepository = getManager().getRepository(Book);
     await bookRepository.save(book);
-    logger.debug("Going to insert: ", req.body)
 
     return res.status(200).json({ msg: "Book inserted into database" })
 
 }
 
+/**
+ * Gets a particular book from the database
+ * @param req 
+ * @param res 
+ * @param next 
+ * @version 1.0.0
+ */
+const getBook = async (req: Request, res: Response, next: NextFunction) => {
+    const id = req.params.bookId;
+    logger.debug("id: ", id)
+    const bookRepository = getManager().getRepository(Book);
+    const book = await bookRepository.findOne(id);
+
+    if (book) {
+
+        res.status(200).json({ book: book });
+    }
+    else {
+
+        res.status(404).send("Can't find the book.")
+    }
+}
+
+/**
+ * Gets all the books in the database
+ * @param req 
+ * @param res 
+ * @param next 
+ * @returns 
+ * @version 1.0.0
+ */
 const getAll = async (req: Request, res: Response, next: NextFunction) => {
     const books = await getRepository(Book).manager.find(Book);
 
@@ -41,13 +78,12 @@ const removeBook = async (req: Request, res: Response, next: NextFunction) => {
      * Id of the book
      */
     const id = req.params.bookId;
-    // await getRepository(Book).manager.createQueryBuilder().delete().where("book_id = :id", { id: id })
     await getRepository(Book).delete(id)
 
-    logger.info("Updated book")
+    logger.info("Removed book")
 
     res.status(200).json({ msg: "Book deleted" });
 }
 
 
-export { save, getAll, removeBook, updateBook } 
+export { save, getAll, removeBook, updateBook, getBook } 

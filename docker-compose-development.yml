@@ -31,6 +31,7 @@ services:
     container_name: lm-backend-db
     volumes:
       - "./pgdata:/var/lib/postgresql/data"
+      - ./src/db/init.sql:/docker-entrypoint-initdb.d/create_tables.sql
     environment:
       - POSTGRES_HOST=lm-backend-db
       - POSTGRES_USER=josemagne

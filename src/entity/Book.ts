@@ -1,7 +1,6 @@
 import { Entity, BaseEntity, Column, PrimaryColumn, CreateDateColumn, UpdateDateColumn, OneToMany, JoinColumn, ManyToMany } from "typeorm";
 import Chapter from './Chapter';
 import { Author } from './Author';
-import { LM_Book_Contents } from "src/types/Book/contents";
 
 @Entity("books")
 export default class Book extends BaseEntity {
@@ -19,18 +18,25 @@ export default class Book extends BaseEntity {
     @Column()
     read: boolean;
 
-    @Column({ type: "json", nullable: true, default: {} })
-    contents: LM_Book_Contents;
-
     @Column()
     progress: number;
 
 
-    @CreateDateColumn()
+    @Column({
+        nullable: true
+    })
     started: Date;
 
-    @UpdateDateColumn()
+    @Column({
+        nullable: true
+    })
     ended: Date;
+
+    @CreateDateColumn()
+    createdAt: Date;
+
+    @UpdateDateColumn()
+    updatedAt: Date;
 
     @OneToMany(() => Chapter, (chapter) => chapter.book, {
         cascade: true

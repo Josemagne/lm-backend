@@ -8,10 +8,4 @@ RUN npm install yarn
 
 RUN yarn
 
-RUN chmod 777 /app/build -R
-
-RUN ls
-
-RUN ls build
-
 CMD ["npm", "run", "dev"]
