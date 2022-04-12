@@ -5,6 +5,7 @@ import { Request, Response, NextFunction } from "express";
 import Book from "../entity/Book";
 import logger from '../utils/logger';
 import { LM_Book } from "src/types/Book/book";
+import { getChapters } from './chapter.controller';
 
 
 
@@ -16,7 +17,7 @@ import { LM_Book } from "src/types/Book/book";
  * @version 1.0.0
  * @returns 
  */
-const save = async (req: Request<{}, {}, LM_Book>, res: Response, next: NextFunction) => {
+const addBook = async (req: Request<{}, {}, LM_Book>, res: Response, next: NextFunction) => {
     const book = new Book();
     Object.assign(book, req.body);
     const bookRepository = getManager().getRepository(Book);
@@ -34,17 +35,15 @@ const save = async (req: Request<{}, {}, LM_Book>, res: Response, next: NextFunc
  * @version 1.0.0
  */
 const getBook = async (req: Request, res: Response, next: NextFunction) => {
-    const id = req.params.bookId;
+    const bookId = req.params.bookId;
     logger.debug("id: ", id)
     const bookRepository = getManager().getRepository(Book);
-    const book = await bookRepository.findOne(id);
+    const book = await bookRepository.findOne({ where: { book_id: bookId } });
 
     if (book) {
-
-        res.status(200).json({ book: book });
+        res.status(200).json(book);
     }
     else {
-
         res.status(404).send("Can't find the book.")
     }
 }
@@ -65,12 +64,18 @@ const getAll = async (req: Request, res: Response, next: NextFunction) => {
     return res.status(200).json(books);
 }
 
+/**
+ * Updates the book
+ * @param req 
+ * @param res 
+ * @param next 
+ */
 const updateBook = async (req: Request<{}, {}, Book>, res: Response, next: NextFunction) => {
     const updatedBook = req.body;
 
-    await getRepository(Book).update(updateBook.book_id, updateBook);
+    await getRepository(Book).createQueryBuilder().update(Book).set(updatedBook).where("book_id = :book_id", { book_id: updatedBook.book_id }).execute();
 
-    res.status(200).json({ msg: updateBook });
+    res.status(200).json({ ...updatedBook });
 }
 
 const removeBook = async (req: Request, res: Response, next: NextFunction) => {
@@ -86,4 +91,4 @@ const removeBook = async (req: Request, res: Response, next: NextFunction) => {
 }
 
 
-export { save, getAll, removeBook, updateBook, getBook } 
+export { addBook, getAll, removeBook, updateBook, getBook } 
