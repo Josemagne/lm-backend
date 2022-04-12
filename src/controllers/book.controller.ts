@@ -36,9 +36,12 @@ const addBook = async (req: Request<{}, {}, LM_Book>, res: Response, next: NextF
  */
 const getBook = async (req: Request, res: Response, next: NextFunction) => {
     const bookId = req.params.bookId;
-    logger.debug("id: ", id)
-    const bookRepository = getManager().getRepository(Book);
-    const book = await bookRepository.findOne({ where: { book_id: bookId } });
+    const book = await getRepository(Book).createQueryBuilder().where("book_id = :book_id", { book_id: bookId }).getOne();
+
+    // const bookRepository = getManager().getRepository(Book);
+    // const book = await bookRepository.findOne({ where: { book_id: bookId } });
+
+    logger.info("The book is: ", book)
 
     if (book) {
         res.status(200).json(book);
@@ -61,7 +64,7 @@ const getAll = async (req: Request, res: Response, next: NextFunction) => {
 
     logger.info("Returned all books from database.")
 
-    return res.status(200).json(books);
+    return res.status(200).json({ books: books });
 }
 
 /**

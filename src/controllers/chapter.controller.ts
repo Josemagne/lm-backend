@@ -34,10 +34,19 @@ const saveChapter = async (req: Request, res: Response, next: NextFunction) => {
 const getChapters = async (req: Request, res: Response, next: NextFunction) => {
     const bookId = req.params.bookId;
 
-    const chapterRepository = getManager().getRepository(Chapter);
-    const chapters = await chapterRepository.find({ where: { book_id: bookId } });
+    let chapters: Chapter[] = []
 
-    return chapters;
+    try {
+
+        chapters = await getRepository(Chapter).createQueryBuilder().where("book_id = :book_id", { book_id: bookId }).getMany();
+    }
+
+    catch (err) {
+        logger.info(`Could not get chapters from book ${bookId}. Here the error:`);
+        logger.error(err)
+    }
+
+    res.status(200).json({ chapters: chapters })
 }
 
 const getChapter = async (req: Request, res: Response, next: NextFunction) => {

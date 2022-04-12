@@ -39,13 +39,9 @@ export default class Chapter extends BaseEntity {
     importance: number;
 
     @Column({
-        nullable: true,
-        type: 'json',
-        // array: false,
-        // default: () => "'[]'",
-        // nullable: false,
+        nullable: true
     })
-    summary: JSON;
+    summary: string;
 
     @Column(
         {
@@ -54,7 +50,6 @@ export default class Chapter extends BaseEntity {
             type: "text"
         }
     )
-    subchapters: string[];
 
     @Column({
         nullable: false,
@@ -66,13 +61,6 @@ export default class Chapter extends BaseEntity {
         nullable: false
     })
     index: string;
-
-    @Column(
-        {
-            nullable: true
-        }
-    )
-    degree: number;
 
     @Column(
         {
@@ -94,9 +82,8 @@ export default class Chapter extends BaseEntity {
     ended: Date | null;
 
     @ManyToOne(() => Book, (book) => book.chapters)
+    // @JoinColumn({ name: "JoinColumn_book_chapter" })
     book: Book;
 
-    // @JoinColumn({ name: "JoinColumn_book_chapter" })
-    // book: Book;
 
 }

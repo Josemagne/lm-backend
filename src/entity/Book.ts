@@ -39,7 +39,7 @@ export default class Book extends BaseEntity {
     updatedAt: Date;
 
     @OneToMany(() => Chapter, (chapter) => chapter.book, {
-        cascade: true
+        cascade: true,
     })
     chapters: Chapter[];
 
