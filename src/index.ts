@@ -11,6 +11,7 @@ import { Author } from './entity/Author';
 import bookRouter from './routes/book.router';
 import { join } from "path";
 import chapterRouter from './routes/chapter.router';
+import { User } from './entity/User';
 
 let port: number = 0;
 /**
@@ -34,7 +35,7 @@ createConnection({
     username: process.env.POSTGRES_USER,
     password: process.env.POSTGRES_PASSWORD,
     database: "librimem",
-    entities: [Book, Chapter, Author],
+    entities: [Book, Chapter, Author, User],
     synchronize: synchronize
     // @ts-ignore
 }).then(async connection => {
