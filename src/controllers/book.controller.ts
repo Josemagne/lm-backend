@@ -35,13 +35,22 @@ const addBook = async (req: Request<{}, {}, LM_Book>, res: Response, next: NextF
  * @version 1.0.0
  */
 const getBook = async (req: Request, res: Response, next: NextFunction) => {
+
+    /* Get user authenticated user data */
+    // NOTE We get this from the middleware auth.middleware.ts
+    const user = res.locals.user;
+
+    console.log("The user is: ", user)
+
+    /* Retrieve data for query */
     const bookId = req.params.bookId;
-    const book = await getRepository(Book).createQueryBuilder().where("book_id = :book_id", { book_id: bookId }).getOne();
 
-    // const bookRepository = getManager().getRepository(Book);
-    // const book = await bookRepository.findOne({ where: { book_id: bookId } });
+    /* Query  */
+    const book = await getRepository(Book).createQueryBuilder().where("book_id = :book_id", { book_id: bookId }).andWhere("user_id = :user_id", { user_id: user.user_id }).getOne();
 
-    logger.info("The book is: ", book)
+    logger.info("reslt: ", book)
+
+    /* Return response */
 
     if (book) {
         res.status(200).json(book);
@@ -60,7 +69,7 @@ const getBook = async (req: Request, res: Response, next: NextFunction) => {
  * @version 1.0.0
  */
 const getAll = async (req: Request, res: Response, next: NextFunction) => {
-    const books = await getRepository(Book).manager.find(Book);
+    const books = await getRepository(Book).createQueryBuilder().getMany();
 
     logger.info("Returned all books from database.")
 

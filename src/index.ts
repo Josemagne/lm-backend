@@ -12,6 +12,7 @@ import bookRouter from './routes/book.router';
 import { join } from "path";
 import chapterRouter from './routes/chapter.router';
 import { User } from './entity/User';
+import authRouter from './routes/auth.router';
 
 let port: number = 0;
 /**
@@ -44,6 +45,7 @@ createConnection({
     // create express app
     const app = express();
     app.use(bodyParser.json());
+    app.use(bodyParser.urlencoded())
     app.use(pino())
     // NOTE cors
     app.use(cors())
@@ -65,6 +67,7 @@ createConnection({
     /* Book routes */
     app.use("/books", bookRouter);
     app.use("/chapters", chapterRouter);
+    app.use("/auth", authRouter)
 
     // @ts-ignore
     app.get('/*', function (req, res) {

@@ -10,6 +10,9 @@ export default class Book extends BaseEntity {
     book_id: string;
 
     @Column()
+    user_id: string;
+
+    @Column()
     book_title: string;
 
     @Column()

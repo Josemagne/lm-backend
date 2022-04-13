@@ -1,5 +1,6 @@
 import express from "express"
 import { addBook, getAll, removeBook, updateBook, getBook } from '../controllers/book.controller';
+import { authenticationMiddleware } from '../middleware/auth.middleware';
 
 // Get the router instance
 const bookRouter = express.Router();
@@ -12,6 +13,6 @@ const bookRouter = express.Router();
 //     res.status(200).json({ book_title: "jaime is an autodidact" })
 // })
 
-bookRouter.route("/").get(getAll).post(addBook);
-bookRouter.route("/:bookId").delete(removeBook).post(updateBook).get(getBook);
+bookRouter.route("/").get(authenticationMiddleware, getAll).post(authenticationMiddleware, addBook);
+bookRouter.route("/:bookId").delete(authenticationMiddleware, removeBook).post(authenticationMiddleware, updateBook).get(authenticationMiddleware, getBook);
 export default bookRouter;
