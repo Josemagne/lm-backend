@@ -14,4 +14,4 @@ get-frontend:
 	echo "finished moving frontend app to backend"
 
 build-prod:
-	$(MAKE) get-frontend && docker build -f Dockerfile.production -t josemagne/librimem-backend:0.0.1 .
+	$(MAKE) get-frontend && docker build -t josemagne/librimem-backend:0.0.1 .

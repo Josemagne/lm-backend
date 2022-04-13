@@ -4,6 +4,7 @@ import { getRepository } from 'typeorm';
 import { User } from '../entity/User';
 import dotenv from "dotenv"
 import { nanoid } from "nanoid";
+import BadRequestError from '../errors/bad-request.error';
 dotenv.config();
 
 /**
@@ -22,7 +23,7 @@ const login = async (req: Request, res: Response) => {
 
 
     if (!process.env.JWT_SECRET) {
-        throw new Error("proces.env.JWT_SECRET is not given");
+        throw new BadRequestError("proces.env.JWT_SECRET is not given");
     }
     const token = jwt.sign({ password, username }, process.env.JWT_SECRET, {
         expiresIn: '30d'

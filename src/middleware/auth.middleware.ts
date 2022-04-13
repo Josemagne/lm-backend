@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import logger from '../utils/logger';
 import jwt from "jsonwebtoken"
 import dotenv from "dotenv";
+import UnauthenticatedError from '../errors/unauthenticated.error';
 dotenv.config();
 
 const authenticationMiddleware = async (req: Request, res: Response, next: NextFunction) => {
@@ -21,7 +22,7 @@ const authenticationMiddleware = async (req: Request, res: Response, next: NextF
     try {
 
         if (!process.env.JWT_SECRET) {
-            throw new Error("process.env.JWT_SECRET is not given");
+            throw new UnauthenticatedError("process.env.JWT_SECRET is not given");
         }
         // Decode token
         const decoded = jwt.verify(token, process.env.JWT_SECRET)
@@ -37,7 +38,7 @@ const authenticationMiddleware = async (req: Request, res: Response, next: NextF
     }
 
     catch (err) {
-        throw new Error("Could not authorize user")
+        throw new UnauthenticatedError("Could not authorize user")
     }
 
 }
