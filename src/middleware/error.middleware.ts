@@ -1,7 +1,7 @@
 import { CustomAPIError } from "src/errors";
 import { Request, Response, NextFunction } from 'express';
 
-const errorMiddleware = (err, req: Request, res: Response, next: NextFunction) => {
+const errorMiddleware = (err, _req: Request, res: Response, _next: NextFunction) => {
     if (err instanceof CustomAPIError) {
         return res.status(err.statusCode).json({ msg: err.message });
     }

@@ -1,4 +1,4 @@
-import { Entity, BaseEntity, Column, PrimaryColumn, CreateDateColumn, UpdateDateColumn, OneToMany, JoinColumn, ManyToMany } from "typeorm";
+import { Entity, BaseEntity, Column, PrimaryColumn, CreateDateColumn, UpdateDateColumn, OneToMany, ManyToMany } from "typeorm";
 import Chapter from './Chapter';
 import { Author } from './Author';
 

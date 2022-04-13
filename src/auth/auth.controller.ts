@@ -19,8 +19,6 @@ const login = async (req: Request, res: Response) => {
         res.status(400).send("Please provide the uesrname and password");
     }
 
-    const { user_id } = await getRepository(User).createQueryBuilder().where("username = :username", { username: username }).andWhere("password = :password", { password: password }).execute();
-
 
     if (!process.env.JWT_SECRET) {
         throw new BadRequestError("proces.env.JWT_SECRET is not given");
@@ -36,10 +34,10 @@ const login = async (req: Request, res: Response) => {
  * Register a new user
  * @param req 
  * @param res 
- * @param next 
+ * @param _next 
  * @returns 
  */
-async function register(req: Request, res: Response, next: NextFunction) {
+async function register(req: Request, res: Response, _next: NextFunction) {
     const newUser = req.body;
 
     if (!newUser.username || !newUser.password) {
@@ -56,11 +54,19 @@ async function register(req: Request, res: Response, next: NextFunction) {
 
     await getRepository(User).save(user).then(() => {
         return res.status(200).send("Added user")
-    }).catch((err) => {
+    }).catch((_err) => {
         return res.status(500).send("Could not add user");
     })
 
-    return res.status(200).send("Added user")
+    if (!process.env.JWT_SECRET) {
+        throw new BadRequestError("proces.env.JWT_SECRET is not given");
+    }
+    const token = jwt.sign({ password: newUser.password, username: newUser.username }, process.env.JWT_SECRET, {
+        expiresIn: '30d'
+    })
+
+
+    return res.status(200).json({ msg: "Added user", token })
 
 }
 

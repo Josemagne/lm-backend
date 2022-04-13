@@ -2,15 +2,14 @@ import { Request, Response, NextFunction } from 'express';
 import Chapter from '../entity/Chapter';
 import { getManager, getRepository } from 'typeorm';
 import logger from '../utils/logger';
-import LM_Chapter from '../types/Book/chapter';
 
 /**
  * Saves the chapter in the backend
  * @param req 
  * @param res 
- * @param next 
+ * @param _next 
  */
-const saveChapter = async (req: Request, res: Response, next: NextFunction) => {
+const saveChapter = async (req: Request, res: Response, _next: NextFunction) => {
 
     const chapter = new Chapter();
     // NOTE Assigns the enumerable props of req.body to chapter!!!
@@ -28,10 +27,10 @@ const saveChapter = async (req: Request, res: Response, next: NextFunction) => {
  * Gets all the chapters of a book
  * @param req 
  * @param res 
- * @param next 
+ * @param _next 
  * @returns 
  */
-const getChapters = async (req: Request, res: Response, next: NextFunction) => {
+const getChapters = async (req: Request, res: Response, _next: NextFunction) => {
     const bookId = req.params.bookId;
 
     let chapters: Chapter[] = []
@@ -49,7 +48,7 @@ const getChapters = async (req: Request, res: Response, next: NextFunction) => {
     res.status(200).json({ chapters: chapters })
 }
 
-const getChapter = async (req: Request, res: Response, next: NextFunction) => {
+const getChapter = async (req: Request, res: Response, _next: NextFunction) => {
     const chapterId = req.params.chapterId;
 
     const chapter = await getRepository(Chapter).createQueryBuilder().where("chapter_id = :chapter_id", { chapter_id: chapterId }).execute();
@@ -63,9 +62,9 @@ const getChapter = async (req: Request, res: Response, next: NextFunction) => {
  * Updates the chapter
  * @param req 
  * @param res 
- * @param next 
+ * @param _next 
  */
-const updateChapter = async (req: Request<{}, {}, Chapter>, res: Response, next: NextFunction) => {
+const updateChapter = async (req: Request<{}, {}, Chapter>, res: Response, _next: NextFunction) => {
 
     const updatedChapter = req.body;
 

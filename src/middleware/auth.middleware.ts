@@ -1,10 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
-import logger from '../utils/logger';
 import jwt from "jsonwebtoken"
 import dotenv from "dotenv";
 import UnauthenticatedError from '../errors/unauthenticated.error';
 dotenv.config();
 
+// @ts-ignore
 const authenticationMiddleware = async (req: Request, res: Response, next: NextFunction) => {
     console.log(req.headers.authorization)
     const authHeader = req.headers.authorization;
@@ -30,8 +30,8 @@ const authenticationMiddleware = async (req: Request, res: Response, next: NextF
         console.log("decoded: ", decoded)
 
         // @ts-ignore
-        const { user_id, username } = decoded;
-        res.locals.user = { user_id, username }
+        const { password, username } = decoded;
+        res.locals.user = { password, username }
 
         // Go to controller
         next();

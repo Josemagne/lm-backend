@@ -69,6 +69,8 @@ const getBook = async (req: Request, res: Response, next: NextFunction) => {
  * @version 1.0.0
  */
 const getAll = async (req: Request, res: Response, next: NextFunction) => {
+    const user = res.locals.user;
+
     const books = await getRepository(Book).createQueryBuilder().getMany();
 
     logger.info("Returned all books from database.")
