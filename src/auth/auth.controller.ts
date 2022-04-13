@@ -52,9 +52,7 @@ async function register(req: Request, res: Response, _next: NextFunction) {
     Object.assign(user, newUser);
 
 
-    await getRepository(User).save(user).then(() => {
-        return res.status(200).send("Added user")
-    }).catch((_err) => {
+    await getRepository(User).save(user).catch((_err) => {
         return res.status(500).send("Could not add user");
     })
 

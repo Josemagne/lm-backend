@@ -37,7 +37,7 @@ createConnection({
     password: process.env.POSTGRES_PASSWORD,
     database: "librimem",
     entities: [Book, Chapter, Author, User],
-    synchronize: synchronize
+    synchronize: true
     // @ts-ignore
 }).then(async connection => {
 
