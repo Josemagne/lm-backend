@@ -2,7 +2,8 @@ import { Request, Response, NextFunction } from 'express';
 import jwt from "jsonwebtoken"
 import dotenv from "dotenv";
 import UnauthenticatedError from '../errors/unauthenticated.error';
-dotenv.config();
+import { join } from 'path';
+dotenv.config({ path: join(__dirname, "..", "..", ".env") });
 
 // @ts-ignore
 const authenticationMiddleware = async (req: Request, res: Response, next: NextFunction) => {

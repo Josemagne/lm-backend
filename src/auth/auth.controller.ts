@@ -5,7 +5,8 @@ import { User } from '../entity/User';
 import dotenv from "dotenv"
 import { nanoid } from "nanoid";
 import BadRequestError from '../errors/bad-request.error';
-dotenv.config();
+import { join } from "path"
+dotenv.config({ path: join(__dirname, "..", "..", ".env") });
 
 /**
  * Creates token and sends it to the user

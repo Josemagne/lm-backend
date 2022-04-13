@@ -13,6 +13,9 @@ import { join } from "path";
 import chapterRouter from './routes/chapter.router';
 import { User } from './entity/User';
 import authRouter from './routes/auth.router';
+import dotenv from "dotenv"
+import path from "path"
+dotenv.config({ path: path.join(__dirname, "..", ".env") })
 
 let port: number = 0;
 /**
