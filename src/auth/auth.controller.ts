@@ -6,7 +6,12 @@ import dotenv from "dotenv"
 import { nanoid } from "nanoid";
 import BadRequestError from '../errors/bad-request.error';
 import { join } from "path"
-dotenv.config({ path: join(__dirname, "..", "..", ".env") });
+import bcrypt from "bcrypt"
+if (process.env.NODE_ENV === "production") {
+    dotenv.config({ path: join(__dirname, "..", ".env") })
+} else {
+    dotenv.config()
+}
 
 /**
  * Creates token and sends it to the user
@@ -14,21 +19,27 @@ dotenv.config({ path: join(__dirname, "..", "..", ".env") });
  * @param res 
  */
 const login = async (req: Request, res: Response) => {
-    const { username, password } = req.body;
+    const { email, password } = req.body;
 
-    if (!username || !password) {
-        res.status(400).send("Please provide the uesrname and password");
+    if (!email || !password) {
+        res.status(400).send("Please provide the email and password");
     }
 
 
     if (!process.env.JWT_SECRET) {
         throw new BadRequestError("proces.env.JWT_SECRET is not given");
     }
-    const token = jwt.sign({ password, username }, process.env.JWT_SECRET, {
+
+    // Encrypt password
+    const encryptedPassword = bcrypt.hash(password, 10);
+
+    const user = await getRepository(User).createQueryBuilder().where("email = :email", { email: email }).andWhere("password = :password", { password: encryptedPassword }).execute();
+
+    const token = jwt.sign({ email: user.email, user_id: user.user_id }, process.env.JWT_SECRET, {
         expiresIn: '30d'
     })
 
-    res.status(200).json({ msg: "User created", token })
+    res.status(200).json({ token })
 }
 
 /**
@@ -42,7 +53,7 @@ async function register(req: Request, res: Response, _next: NextFunction) {
     const newUser = req.body;
 
     if (!newUser.email || !newUser.password) {
-        return res.status(400).send("Please provide username and password");
+        return res.status(400).send("Please provide email and password");
     }
 
     const user_id = nanoid();
@@ -50,8 +61,17 @@ async function register(req: Request, res: Response, _next: NextFunction) {
 
     const user = new User();
 
-    Object.assign(user, newUser);
+    // Check if user already exists
+    const oldUser = await getRepository(User).findOne({ where: { email: newUser.email } });
+    if (oldUser) {
+        return res.status(409).send("User already exists");
+    }
 
+    // Encrypt password
+    const encryptedPassword = await bcrypt.hash(newUser.password, 10);
+    newUser.password = encryptedPassword;
+
+    Object.assign(user, newUser);
 
     await getRepository(User).save(user).catch((_err) => {
         return res.status(500).send("Could not add user");
@@ -65,7 +85,7 @@ async function register(req: Request, res: Response, _next: NextFunction) {
     })
 
 
-    return res.status(200).json({ msg: "Added user", token })
+    return res.status(200).json({ token })
 
 }
 

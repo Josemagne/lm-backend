@@ -5,7 +5,6 @@ import { Request, Response, NextFunction } from "express";
 import Book from "../entity/Book";
 import logger from '../utils/logger';
 import { LM_Book } from "src/types/Book/book";
-import { getChapters } from './chapter.controller';
 
 
 
@@ -18,10 +17,14 @@ import { getChapters } from './chapter.controller';
  * @returns 
  */
 const addBook = async (req: Request<{}, {}, LM_Book>, res: Response, next: NextFunction) => {
-    const book = new Book();
-    Object.assign(book, req.body);
-    const bookRepository = getManager().getRepository(Book);
-    await bookRepository.save(book);
+
+    const user = res.locals.users;
+
+    const newBook = new Book();
+    Object.assign(newBook, req.body);
+    book.user_id = user.user_id;
+
+    await getRepository(Book).createQueryBuilder().insert(newBook).execute();
 
     return res.status(200).json({ msg: "Book inserted into database" })
 
@@ -71,7 +74,7 @@ const getBook = async (req: Request, res: Response, next: NextFunction) => {
 const getAll = async (req: Request, res: Response, next: NextFunction) => {
     const user = res.locals.user;
 
-    const books = await getRepository(Book).createQueryBuilder().getMany();
+    const books = await getRepository(Book).createQueryBuilder().where("user_id = :user_id", { user_id: user.user_id }).getMany();
 
     logger.info("Returned all books from database.")
 
@@ -85,21 +88,24 @@ const getAll = async (req: Request, res: Response, next: NextFunction) => {
  * @param next 
  */
 const updateBook = async (req: Request<{}, {}, Book>, res: Response, next: NextFunction) => {
+    const user = res.locals.user;
+
     const updatedBook = req.body;
 
-    await getRepository(Book).createQueryBuilder().update(Book).set(updatedBook).where("book_id = :book_id", { book_id: updatedBook.book_id }).execute();
+    await getRepository(Book).createQueryBuilder().update(Book).set(updatedBook).where("book_id = :book_id", { book_id: updatedBook.book_id }).andWhere("user_id = :user_id", { user_id: user.user_id }).execute();
 
     res.status(200).json({ ...updatedBook });
 }
 
 const removeBook = async (req: Request, res: Response, next: NextFunction) => {
+    const user = res.locals.user;
+
     /**
      * Id of the book
      */
-    const id = req.params.bookId;
-    await getRepository(Book).delete(id)
+    const bookId = req.params.bookId;
 
-    logger.info("Removed book")
+    await getRepository(Book).createQueryBuilder().delete().where("book_id = :book_id", { book_id: bookId }).andWhere("user_id = :user_id", { user_id: user.user_id }).execute();
 
     res.status(200).json({ msg: "Book deleted" });
 }

@@ -3,7 +3,11 @@ import jwt from "jsonwebtoken"
 import dotenv from "dotenv";
 import UnauthenticatedError from '../errors/unauthenticated.error';
 import { join } from 'path';
-dotenv.config({ path: join(__dirname, "..", "..", ".env") });
+if (process.env.NODE_ENV === "production") {
+    dotenv.config({ path: join(__dirname, "..", ".env") })
+} else {
+    dotenv.config()
+}
 
 // @ts-ignore
 const authenticationMiddleware = async (req: Request, res: Response, next: NextFunction) => {
@@ -31,8 +35,8 @@ const authenticationMiddleware = async (req: Request, res: Response, next: NextF
         console.log("decoded: ", decoded)
 
         // @ts-ignore
-        const { password, username } = decoded;
-        res.locals.user = { password, username }
+        const { user_id, email } = decoded;
+        res.locals.user = { user_id, email }
 
         // Go to controller
         next();

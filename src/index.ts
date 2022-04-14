@@ -15,7 +15,7 @@ import { User } from './entity/User';
 import authRouter from './routes/auth.router';
 import dotenv from "dotenv"
 import path from "path"
-dotenv.config({ path: path.join(__dirname, "..", ".env") })
+dotenv.config();
 
 let port: number = 0;
 /**
