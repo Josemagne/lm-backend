@@ -17,12 +17,11 @@ import { LM_Book } from "src/types/Book/book";
  * @returns 
  */
 const addBook = async (req: Request<{}, {}, LM_Book>, res: Response, next: NextFunction) => {
-
     const user = res.locals.users;
 
     const newBook = new Book();
     Object.assign(newBook, req.body);
-    book.user_id = user.user_id;
+    newBook.user_id = user.user_id;
 
     await getRepository(Book).createQueryBuilder().insert(newBook).execute();
 
