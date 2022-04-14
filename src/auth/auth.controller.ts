@@ -41,7 +41,7 @@ const login = async (req: Request, res: Response) => {
 async function register(req: Request, res: Response, _next: NextFunction) {
     const newUser = req.body;
 
-    if (!newUser.username || !newUser.password) {
+    if (!newUser.email || !newUser.password) {
         return res.status(400).send("Please provide username and password");
     }
 
@@ -60,7 +60,7 @@ async function register(req: Request, res: Response, _next: NextFunction) {
     if (!process.env.JWT_SECRET) {
         throw new BadRequestError("proces.env.JWT_SECRET is not given");
     }
-    const token = jwt.sign({ password: newUser.password, username: newUser.username }, process.env.JWT_SECRET, {
+    const token = jwt.sign({ email: newUser.email, user_id: user_id }, process.env.JWT_SECRET, {
         expiresIn: '30d'
     })
 
