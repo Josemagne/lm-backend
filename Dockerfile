@@ -14,4 +14,4 @@ COPY --from=0 /usr/src/app/build ./build
 COPY package.json ./package.json
 RUN yarn install --production
 EXPOSE 4000
-CMD npm start
+CMD ["npm", "run", "start"]

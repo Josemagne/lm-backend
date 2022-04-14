@@ -29,6 +29,7 @@ const authenticationMiddleware = async (req: Request, res: Response, next: NextF
         if (!process.env.JWT_SECRET) {
             throw new UnauthenticatedError("process.env.JWT_SECRET is not given");
         }
+
         // Decode token
         const decoded = jwt.verify(token, process.env.JWT_SECRET)
 
@@ -43,7 +44,7 @@ const authenticationMiddleware = async (req: Request, res: Response, next: NextF
     }
 
     catch (err) {
-        throw new UnauthenticatedError("Could not authorize user")
+        console.log(err);
     }
 
 }
