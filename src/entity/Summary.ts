@@ -7,7 +7,13 @@ export class Summary extends BaseEntity {
     summary_id: string
 
     @Column()
+    user_id: string;
+
+    @Column()
     chapter_id: string | null;
+
+    @Column()
+    book_id: string;
 
     @Column()
     data: string;

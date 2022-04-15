@@ -7,6 +7,9 @@ export default class Chapter extends BaseEntity {
     @PrimaryColumn()
     chapter_id: string;
 
+    @Column()
+    user_id: string;
+
     // NOTE Foreign Key (fk)
     @Column({
         nullable: false

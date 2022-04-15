@@ -5,12 +5,16 @@ import Book from './Book';
 export class Author extends BaseEntity {
     @PrimaryColumn()
     author_id: string;
+
     @Column()
     author_prename: string;
+
     @Column()
     author_name: string;
+
     @Column({ type: "simple-array" })
     books: Book[];
+
     @Column()
     favorite: boolean;
 
