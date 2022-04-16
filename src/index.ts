@@ -34,7 +34,7 @@ if (process.env.NODE_ENV === "development") {
 // TODO Pass the parameters from .env to createConnection()
 createConnection({
     type: "postgres",
-    host: "lm-backend-db",
+    host: process.env.NODE_ENV === "development" ? "lm-backend-db" : process.env.POSTGRES_HOST,
     port: 5432,
     username: process.env.POSTGRES_USER,
     password: process.env.POSTGRES_PASSWORD,
