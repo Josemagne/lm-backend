@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: frontend
+  template:
+    metadata:
+      labels:
+        components: frontend
+      spec:
+        containers:
+          - name: lm-frontend
+            image: josemagne/lm-frontend:1.0.0
+            ports:
+              - containerPort: 80
+            env:
+              - name: BACKEND_PORT
+                value: 4000
+              - name: BACKED_IP_PRODUCTION
+                value: books-cluster-ip-service
+        imagePullSecrets:
+          - name: dockersecret

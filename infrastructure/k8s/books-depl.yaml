@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: book-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: books
+  template:
+    metadata:
+      labels:
+        component: books
+    spec:
+      containers:
+        - name: lm-backend
+          imagePullPolicy: Always
+          image: josemagne/lm-backend:1.0.3
+          ports:
+            - containerPort: 4000
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: pguser
+                  key: PGUSER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: pgpassword
+                  key: PGPASSWORD
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: pgdatabase
+                  key: PGDATABASE
+            - name: POSTGRES_HOST
+              value: postgres-cluster-ip-service
+      imagePullSecrets:
+        - name: dockersecret

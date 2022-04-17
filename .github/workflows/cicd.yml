@@ -26,3 +26,14 @@ jobs:
         with:
           push: true
           tags: josemagne/lm-backend:1.0.3
+  deploy:
+    name: deploy lm backend
+    runs-on: ubuntu-20.04
+    needs: ["build"]
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - name: Set config from kubeconfig
+        uses:
