@@ -7,11 +7,13 @@ on:
     branches: [master]
 
 jobs:
-  build:
-    name: build lm
-    runs-on: ubuntu-20.04
+  build-and-deploy:
+    name: build and deploy
+    runs-on: ubuntu-latest
 
     steps:
+      - name: checkout
+        uses: actions/checkout@v2
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
       - name: Set up Docker Buildx
@@ -21,19 +23,15 @@ jobs:
         with:
           username: josemagne
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
-      - name: Build and push
-        uses: docker/build-push-action@v2
+      - name: Kubernetes set context
+        uses: Azure/k8s-set-context@v1
         with:
-          push: true
-          tags: josemagne/lm-backend:1.0.3
-  deploy:
-    name: deploy lm backend
-    runs-on: ubuntu-20.04
-    needs: ["build"]
-
-    steps:
-      - name: checkout
-        uses: actions/checkout@v2
-
-      - name: Set config from kubeconfig
-        uses:
+          method: kubeconfig
+          kubeconfig: ${{ secrets.KUBE_CONFIG }}
+      - name: Docker Build and Push, Kubernetes apply
+        run: |
+          docker build --tag josemagne/lm-frontend:1.0.3 .
+          docker push josemagne/lm-frontend:1.0.3
+          export DOCKER_CONFIG=$(cat ~/.docker/config.json | base64 -w 0)
+          sed -i'' -e "s/DOCKER_CONFIG/$DOCKER_CONFIG/g" infrastructure/k8s/dockersecret.yaml
+          kubectl apply -f infrastructure/k8s/books-depl.yaml
