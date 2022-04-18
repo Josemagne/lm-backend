@@ -18,6 +18,9 @@ spec:
                 port:
                   number: 3000
           - path: /api/?(.*)
+            pathType: Prefix
             backend:
-              serviceName: books-cluster-ip-service
-              servicePort: 4200
+              service:
+                name: books-cluster-ip-service
+                port:
+                  number: 4200

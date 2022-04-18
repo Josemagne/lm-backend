@@ -7,8 +7,8 @@ on:
     branches: [master]
 
 jobs:
-  build-and-deploy:
-    name: build and deploy
+  build:
+    name: build
     runs-on: ubuntu-latest
 
     steps:
@@ -23,15 +23,56 @@ jobs:
         with:
           username: josemagne
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
-      - name: Kubernetes set context
-        uses: Azure/k8s-set-context@v1
+      - name: Build and push
+        uses: docker/build-push-action@v2
         with:
-          method: kubeconfig
-          kubeconfig: ${{ secrets.KUBE_CONFIG }}
-      - name: Docker Build and Push, Kubernetes apply
-        run: |
-          docker build --tag josemagne/lm-frontend:1.0.3 .
-          docker push josemagne/lm-frontend:1.0.3
-          export DOCKER_CONFIG=$(cat ~/.docker/config.json | base64 -w 0)
-          sed -i'' -e "s/DOCKER_CONFIG/$DOCKER_CONFIG/g" infrastructure/k8s/dockersecret.yaml
-          kubectl apply -f infrastructure/k8s/books-depl.yaml
+          push: true
+          tags: josemagne/lm-backend:1.0.4
+
+  deploy:
+    name: deploy
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Install SSH Key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          known_hosts: "blabla"
+      - name: Adding Known Hosts
+        run: ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+      - name: Deploy to linode via SSH action
+        uses: appleboy/ssh-action@v0.1.3
+        with:
+          host: ${{ secrets.HOST }}
+          username: root
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            # Login to registry
+            docker login -u josemagne -p ${{ secrets.DOCKERHUB_PASSWORD }}
+            # Stop running container
+            docker stop josemagne/lm-backend:1.0.3
+            # Remove old container
+            docker container rm josemagne/lm-backend:1.0.3
+            # Run a new container from a new image
+            docker run -d \
+            --restart always \
+            --net=lm-network
+            -e POSTGRES_USER='josemagne' \
+            -e POSTGRES_PASSWORD='josemagne' \
+            -e POSTGRES_DB='librimem' \
+            -e POSTGRES_HOST='lm-backend-db' \
+            --name lm-backend \
+            josemagne/lm-backend:1.0.4
+
+      # - name: Kubernetes set context
+      #   uses: Azure/k8s-set-context@v1
+      #   with:
+      #     method: kubeconfig
+      #     kubeconfig: ${{ secrets.KUBE_CONFIG }}
+      # - name: Docker Build and Push, Kubernetes apply
+      #   run: |
+      #     docker build --tag josemagne/lm-frontend:1.0.3 .
+      #     docker push josemagne/lm-frontend:1.0.3
+      #     export DOCKER_CONFIG=$(cat ~/.docker/config.json | base64 -w 0)
+      #     sed -i'' -e "s/DOCKER_CONFIG/$DOCKER_CONFIG/g" infrastructure/k8s/dockersecret.yaml
+      #     kubectl apply -f infrastructure/k8s/books-depl.yaml
