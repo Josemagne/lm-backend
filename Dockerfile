@@ -13,5 +13,5 @@ RUN npm install yarn
 COPY --from=0 /usr/src/app/build ./build
 COPY package.json ./package.json
 RUN yarn install --production
-EXPOSE 4000
+EXPOSE 80
 CMD ["npm", "run", "start"]

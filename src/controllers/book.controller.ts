@@ -17,8 +17,10 @@ import { LM_Book } from "src/types/Book/book";
  * @returns 
  */
 const addBook = async (req: Request<{}, {}, LM_Book>, res: Response, next: NextFunction) => {
-    const user = res.locals.users;
+    const user = res.locals.user;
+    console.log("user in addBook: ", user)
 
+    console.log("req.body: ", req.body)
     const newBook = new Book();
     Object.assign(newBook, req.body);
     newBook.user_id = user.user_id;

@@ -37,6 +37,7 @@ const authenticationMiddleware = async (req: Request, res: Response, next: NextF
 
         // @ts-ignore
         const { user_id, email } = decoded;
+        console.log("user_id: ", user_id)
         res.locals.user = { user_id, email }
 
         // Go to controller

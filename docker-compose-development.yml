@@ -3,7 +3,7 @@ version: "3.7"
 # Our services
 services:
   lm-backend:
-    container_name: lm-backend
+    container_name: lm-backend-dev
     image: lm-backend
     depends_on:
       - lm-backend-db
