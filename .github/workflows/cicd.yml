@@ -58,7 +58,7 @@ jobs:
             # Run a new container from a new image
             docker run -d \
             --restart always \
-            --net=lm-network
+            --net=lm-network \
             -e POSTGRES_USER='josemagne' \
             -e POSTGRES_PASSWORD='josemagne' \
             -e POSTGRES_DB='librimem' \
