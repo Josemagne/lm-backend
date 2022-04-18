@@ -49,6 +49,8 @@ jobs:
           script: |
             # Login to registry
             docker login -u josemagne -p ${{ secrets.DOCKERHUB_PASSWORD }}
+            # Pull new image
+            docker pull josemagne/lm-backend:1.0.4
             # Stop running container
             docker stop josemagne/lm-backend:1.0.3
             # Remove old container
