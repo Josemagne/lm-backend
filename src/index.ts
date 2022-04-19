@@ -68,11 +68,10 @@ createConnection({
     }
 
     /* Book routes */
-    app.use("/books", bookRouter);
-    app.use("/chapters", chapterRouter);
-    app.use("/auth", authRouter)
+    app.use("/api/books", bookRouter);
+    app.use("/api/chapters", chapterRouter);
+    app.use("/api/auth", authRouter)
 
-    // @ts-ignore
     app.get('/*', function (req, res) {
         if (process.env.NODE_ENV === "production") {
 
