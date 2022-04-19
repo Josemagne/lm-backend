@@ -52,9 +52,9 @@ jobs:
             # Pull new image
             docker pull josemagne/lm-backend:1.0.4
             # Stop running container
-            docker stop josemagne/lm-backend:1.0.3
+            docker stop josemagne/lm-backend
             # Remove old container
-            docker container rm josemagne/lm-backend:1.0.3
+            docker container rm josemagne/lm-backend
             # Run a new container from a new image
             docker run -d \
             --restart always \
