@@ -23,4 +23,4 @@ RUN yarn install --production
 
 EXPOSE 80
 
-CMD ["npx", "pm2", "start", "./build/index.js"]
+CMD ["npm", "run", "start"]

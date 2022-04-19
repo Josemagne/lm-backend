@@ -14,19 +14,13 @@ import chapterRouter from './routes/chapter.router';
 import { User } from './entity/User';
 import authRouter from './routes/auth.router';
 import dotenv from "dotenv"
-import path from "path"
 dotenv.config();
 
-let port: number = 0;
-/**
- * Decides if we synchronize the entities with db
- */
-let synchronize: boolean = false;
+let port = 0;
 
 // Get the port
 if (process.env.NODE_ENV === "development") {
     port = 4000;
-    synchronize = true;
 } else {
     port = 4000
 }
@@ -41,7 +35,6 @@ createConnection({
     database: "librimem",
     entities: [Book, Chapter, Author, User],
     synchronize: true
-    // @ts-ignore
 }).then(async connection => {
 
 
