@@ -5,6 +5,9 @@ import { Request, Response, NextFunction } from "express";
 import Book from "../entity/Book";
 import logger from '../utils/logger';
 import { LM_Book } from "src/types/Book/book";
+import Chapter from '../entity/Chapter';
+import Author from "../entity/Author";
+import { nanoid } from 'nanoid';
 
 
 
@@ -22,13 +25,29 @@ const addBook = async (req: Request<{}, {}, LM_Book>, res: Response, next: NextF
 
     console.log("req.body: ", req.body)
     const newBook = new Book();
-    Object.assign(newBook, req.body);
+    const { book_id, author, book_title, pages, read, progress } = req.body as LM_Book;
+
     newBook.user_id = user.user_id;
+    newBook.author = author;
+    newBook.book_id = book_id;
+    newBook.book_title = book_title;
+    newBook.pages = pages;
+    newBook.read = read;
+    newBook.progress = progress;
 
-    await getRepository(Book).createQueryBuilder().insert(newBook).execute();
+    await getRepository(Book).createQueryBuilder().insert().values(newBook).execute();
 
+    // NewAuthor
+    const newAuthor = new Author();
+    newAuthor.author_id = nanoid();
+    newAuthor.user_id = user.user_id;
+    // newAuthor.author_prename = author.split(" ")[0]
+    // newAuthor.author_name = author.split(" ")[1]
+    newAuthor.books = [];
+    newAuthor.favorite = false;
+
+    await getRepository(Author).createQueryBuilder().insert().values(newAuthor).execute();
     return res.status(200).json({ msg: "Book inserted into database" })
-
 }
 
 /**

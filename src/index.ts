@@ -7,7 +7,7 @@ import pino from 'pino-http';
 // NOTE Entities
 import Book from "./entity/Book";
 import Chapter from "./entity/Chapter";
-import { Author } from './entity/Author';
+import Author from './entity/Author';
 import bookRouter from './routes/book.router';
 import { join } from "path";
 import chapterRouter from './routes/chapter.router';

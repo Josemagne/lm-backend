@@ -2,15 +2,18 @@ import { Entity, BaseEntity, PrimaryColumn, Column, ManyToMany, JoinTable } from
 import Book from './Book';
 
 @Entity("authors")
-export class Author extends BaseEntity {
+export default class Author extends BaseEntity {
     @PrimaryColumn()
     author_id: string;
 
     @Column()
-    author_prename: string;
+    user_id: string;
 
-    @Column()
-    author_name: string;
+    // @Column()
+    // author_prename: string;
+
+    // @Column()
+    // author_name: string;
 
     @Column({ type: "simple-array" })
     books: Book[];

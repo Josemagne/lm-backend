@@ -1,6 +1,6 @@
 import { Entity, BaseEntity, Column, PrimaryColumn, CreateDateColumn, UpdateDateColumn, OneToMany, ManyToMany } from "typeorm";
 import Chapter from './Chapter';
-import { Author } from './Author';
+import Author from './Author';
 
 @Entity("books")
 export default class Book extends BaseEntity {

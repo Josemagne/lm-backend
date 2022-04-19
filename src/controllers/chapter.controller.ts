@@ -19,7 +19,7 @@ const saveChapter = async (req: Request, res: Response, _next: NextFunction) => 
 
     chapter.user_id = user.user_id;
 
-    await getRepository(Chapter).createQueryBuilder().insert().into(Chapter).values(chapter).execute();
+    await getRepository(Chapter).createQueryBuilder().insert().values(chapter).execute();
 
     return res.status(200).json(chapter);
 
