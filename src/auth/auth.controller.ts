@@ -7,11 +7,7 @@ import { nanoid } from "nanoid";
 import BadRequestError from '../errors/bad-request.error';
 import { join } from "path"
 import bcrypt from "bcrypt"
-if (process.env.NODE_ENV === "production") {
-    dotenv.config({ path: join(__dirname, "..", ".env") })
-} else {
-    dotenv.config()
-}
+dotenv.config()
 
 /**
  * Creates token and sends it to the user
@@ -80,6 +76,7 @@ async function register(req: Request, res: Response, _next: NextFunction) {
     const encryptedPassword = await bcrypt.hashSync(newUser.password, 10);
     newUser.password = encryptedPassword;
 
+    console.log("newUser: ", newUser)
     Object.assign(user, newUser);
 
     await getRepository(User).save(user).
@@ -90,12 +87,14 @@ async function register(req: Request, res: Response, _next: NextFunction) {
     if (!process.env.JWT_SECRET) {
         throw new BadRequestError("proces.env.JWT_SECRET is not given");
     }
-    const token = jwt.sign({ email: newUser.email, user_id: user_id }, process.env.JWT_SECRET, {
+    const token = jwt.sign({ email: newUser.email, user_id: newUser.user_id }, process.env.JWT_SECRET, {
         expiresIn: '30d'
     })
 
+    console.log("token: ", jwt.verify(token, process.env.JWT_SECRET))
 
-    return res.status(200).json({ token })
+
+    return res.status(200).json({ token, result: "success" })
 
 }
 
