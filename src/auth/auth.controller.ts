@@ -31,15 +31,23 @@ const login = async (req: Request, res: Response) => {
     }
 
     // Encrypt password
-    const encryptedPassword = bcrypt.hash(password, 10);
+    const encryptedPassword = bcrypt.hashSync(password, 10);
 
     const user = await getRepository(User).createQueryBuilder().where("email = :email", { email: email }).andWhere("password = :password", { password: encryptedPassword }).execute();
 
-    const token = jwt.sign({ email: user.email, user_id: user.user_id }, process.env.JWT_SECRET, {
-        expiresIn: '30d'
-    })
+    if (user) {
+        const token = jwt.sign({ email: user.email, user_id: user.user_id }, process.env.JWT_SECRET, {
+            expiresIn: '30d'
+        })
 
-    res.status(200).json({ token })
+        res.status(200).json({ token, result: "success" })
+    }
+    else {
+        res.status(401).json({ result: "failure" })
+
+    }
+
+
 }
 
 /**
@@ -69,7 +77,7 @@ async function register(req: Request, res: Response, _next: NextFunction) {
     }
 
     // Encrypt password
-    const encryptedPassword = await bcrypt.hash(newUser.password, 10);
+    const encryptedPassword = await bcrypt.hashSync(newUser.password, 10);
     newUser.password = encryptedPassword;
 
     Object.assign(user, newUser);

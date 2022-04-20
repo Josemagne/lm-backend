@@ -96,8 +96,6 @@ const getAll = async (req: Request, res: Response, next: NextFunction) => {
 
     const books = await getRepository(Book).createQueryBuilder().where("user_id = :user_id", { user_id: user.user_id }).getMany();
 
-    logger.info("Returned all books from database.")
-
     return res.status(200).json({ books: books });
 }
 
@@ -114,7 +112,7 @@ const updateBook = async (req: Request<{}, {}, Book>, res: Response, next: NextF
 
     await getRepository(Book).createQueryBuilder().update(Book).set(updatedBook).where("book_id = :book_id", { book_id: updatedBook.book_id }).andWhere("user_id = :user_id", { user_id: user.user_id }).execute();
 
-    res.status(200).json({ ...updatedBook });
+    res.status(200).json({ data: updatedBook });
 }
 
 const removeBook = async (req: Request, res: Response, next: NextFunction) => {
