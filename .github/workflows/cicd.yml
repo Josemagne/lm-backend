@@ -67,6 +67,7 @@ jobs:
             -e POSTGRES_PASSWORD='josemagne' \
             -e POSTGRES_DB='librimem' \
             -e POSTGRES_HOST='lm-backend-db' \
+            -e JWT_SECRET='eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTY1MDQ1Mzg5MCwiaWF0IjoxNjUwNDUzODkwfQ.Yjqkq3LulZ75kJZ6sChQFLFhTEZ1ZVGAZ4DzFpriz6w'
             --name lm-backend \
             josemagne/lm-backend:1.0.5
 
