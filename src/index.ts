@@ -41,24 +41,20 @@ createConnection({
     // create express app
     const app = express();
     app.use(bodyParser.json());
-    app.use(bodyParser.urlencoded())
+    app.use(bodyParser.urlencoded({ extended: false }))
     app.use(pino())
     // NOTE cors
-    app.use(cors())
-    app.use(express.urlencoded({ extended: true }))
+    app.use(cors({
+        origin: "*", methods: "GET,HEAD,PUT,POST,DELETE,PATCH", "preflightContinue": false,
+        "optionsSuccessStatus": 204
+    }))
+    // Allow all options
+    app.options('*', cors())
     // NOTE Serves "/"
 
     const dev = join(__dirname, "..", "build", "assets")
 
     const prod = join(__dirname, "assets");
-
-    if (process.env.NODE_ENV === "production") {
-
-        app.use(express.static(prod))
-    }
-    else {
-        app.use(express.static(dev))
-    }
 
     /* Book routes */
     app.use("/api/books", bookRouter);
