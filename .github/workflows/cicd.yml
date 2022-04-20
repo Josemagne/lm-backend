@@ -27,7 +27,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: josemagne/lm-backend:1.0.5
+          tags: josemagne/lm-backend:1.0.6
 
   deploy:
     name: deploy
@@ -51,13 +51,13 @@ jobs:
             # Login to registry
             docker login -u josemagne -p ${{ secrets.DOCKERHUB_PASSWORD }}
             # Pull new image
-            docker pull josemagne/lm-backend:1.0.5
+            docker pull josemagne/lm-backend:1.0.6
             # Stop running container
             docker stop lm-backend
             # Remove old container
             docker container rm lm-backend
             # Remove old image
-            docker image rm josemagne/lm-backend:1.0.4
+            docker image rm josemagne/lm-backend:1.0.5
             # Run a new container from a new image
             docker run -d \
             --restart always \
@@ -67,9 +67,9 @@ jobs:
             -e POSTGRES_PASSWORD='josemagne' \
             -e POSTGRES_DB='librimem' \
             -e POSTGRES_HOST='lm-backend-db' \
-            -e JWT_SECRET='eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTY1MDQ1Mzg5MCwiaWF0IjoxNjUwNDUzODkwfQ.Yjqkq3LulZ75kJZ6sChQFLFhTEZ1ZVGAZ4DzFpriz6w'
+            -e JWT_SECRET='eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTY1MDQ1Mzg5MCwiaWF0IjoxNjUwNDUzODkwfQ.Yjqkq3LulZ75kJZ6sChQFLFhTEZ1ZVGAZ4DzFpriz6w' \
             --name lm-backend \
-            josemagne/lm-backend:1.0.5
+            josemagne/lm-backend:1.0.6
 
       # - name: Kubernetes set context
       #   uses: Azure/k8s-set-context@v1

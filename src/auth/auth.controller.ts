@@ -21,6 +21,8 @@ const login = async (req: Request, res: Response) => {
         res.status(400).send("Please provide the email and password");
     }
 
+    console.log("email and pwd: ", req.body)
+
 
     if (!process.env.JWT_SECRET) {
         throw new BadRequestError("proces.env.JWT_SECRET is not given");
@@ -29,12 +31,12 @@ const login = async (req: Request, res: Response) => {
     // Encrypt password
     const encryptedPassword = bcrypt.hashSync(password, 10);
 
-    const user = await getRepository(User).createQueryBuilder().where("email = :email", { email: email }).andWhere("password = :password", { password: encryptedPassword }).execute();
+    const user = await getRepository(User).createQueryBuilder().where("email = :email", { email: email }).andWhere("password = :password", { password: encryptedPassword }).getOne();
+
+    console.log("The user: ", user)
 
     if (user) {
-        const token = jwt.sign({ email: user.email, user_id: user.user_id }, process.env.JWT_SECRET, {
-            expiresIn: '30d'
-        })
+        const token = user.token;
 
         res.status(200).json({ token, result: "success" })
     }
@@ -79,10 +81,6 @@ async function register(req: Request, res: Response, _next: NextFunction) {
     console.log("newUser: ", newUser)
     Object.assign(user, newUser);
 
-    await getRepository(User).save(user).
-        catch((_err) => {
-            return res.status(500).send("Could not add user");
-        })
 
     if (!process.env.JWT_SECRET) {
         throw new BadRequestError("proces.env.JWT_SECRET is not given");
@@ -90,6 +88,12 @@ async function register(req: Request, res: Response, _next: NextFunction) {
     const token = jwt.sign({ email: newUser.email, user_id: newUser.user_id }, process.env.JWT_SECRET, {
         expiresIn: '30d'
     })
+
+    user.token = token;
+    await getRepository(User).save(user).
+        catch((_err) => {
+            return res.status(500).send("Could not add user");
+        })
 
     console.log("token: ", jwt.verify(token, process.env.JWT_SECRET))
 

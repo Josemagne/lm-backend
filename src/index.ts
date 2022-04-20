@@ -14,6 +14,7 @@ import chapterRouter from './routes/chapter.router';
 import { User } from './entity/User';
 import authRouter from './routes/auth.router';
 import dotenv from "dotenv"
+import Flashcard from './entity/Flashcard';
 dotenv.config();
 
 let port = 0;
@@ -33,7 +34,7 @@ createConnection({
     username: process.env.POSTGRES_USER,
     password: process.env.POSTGRES_PASSWORD,
     database: "librimem",
-    entities: [Book, Chapter, Author, User],
+    entities: [Book, Chapter, Author, User, Flashcard],
     synchronize: true
 }).then(async connection => {
 
