@@ -61,6 +61,7 @@ jobs:
             docker run -d \
             --restart always \
             --net=lm-network \
+            -p 4000:4000 \
             -e POSTGRES_USER='josemagne' \
             -e POSTGRES_PASSWORD='josemagne' \
             -e POSTGRES_DB='librimem' \
