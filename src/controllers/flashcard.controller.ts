@@ -29,11 +29,20 @@ const getFlashcards = async (req: Request, res: Response) => {
 }
 
 const updateFlashcard = async (req: Request, res: Response) => {
+    const updatedFlashcard = req.body;
 
+    const newFlashcard = await getRepository(Flashcard).createQueryBuilder().update().set(updatedFlashcard).where("flashcard_id = :flashcard_id", { flashcard_id: updatedFlashcard.flashcard_id })
+
+    return res.status(200).json({ result: "success", flashcard: newFlashcard })
 }
 
-const removeFlashcard = async (req: Request, res: Response) => {
 
+const removeFlashcard = async (req: Request, res: Response) => {
+    const flashcardId = req.params.flashcardId;
+
+    const deletedFlashcard = await getRepository(Flashcard).createQueryBuilder().delete().where("flashcard_id = :flashcard_id", { flashcard_id: flashcardId }).execute();
+
+    return res.status(200).json({ result: "success", flashcard: deletedFlashcard });
 }
 
 

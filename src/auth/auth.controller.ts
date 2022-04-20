@@ -28,14 +28,9 @@ const login = async (req: Request, res: Response) => {
         throw new BadRequestError("proces.env.JWT_SECRET is not given");
     }
 
-    // Encrypt password
-    const encryptedPassword = bcrypt.hashSync(password, 10);
+    const user = await getRepository(User).createQueryBuilder().where("email = :email", { email: email }).getOne();
 
-    const user = await getRepository(User).createQueryBuilder().where("email = :email", { email: email }).andWhere("password = :password", { password: encryptedPassword }).getOne();
-
-    console.log("The user: ", user)
-
-    if (user) {
+    if (user && bcrypt.compareSync(password, user.password)) {
         const token = user.token;
 
         res.status(200).json({ token, result: "success" })
