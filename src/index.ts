@@ -50,36 +50,11 @@ createConnection({
     }))
     // Allow all options
     app.options('*', cors())
-    // NOTE Serves "/"
-
-    const dev = join(__dirname, "..", "build", "assets")
-
-    const prod = join(__dirname, "assets");
 
     /* Book routes */
     app.use("/api/books", bookRouter);
     app.use("/api/chapters", chapterRouter);
     app.use("/api/auth", authRouter)
-
-    app.get('/*', function (req, res) {
-        if (process.env.NODE_ENV === "production") {
-
-            res.sendFile(join(prod), function (err) {
-                if (err) {
-                    res.status(500).send(err)
-                }
-            })
-        }
-        else {
-            res.sendFile(dev, function (err) {
-                if (err) {
-                    res.status(500).send(err);
-                }
-            })
-        }
-
-    })
-
 
     // start express server
     app.listen(port, () => {

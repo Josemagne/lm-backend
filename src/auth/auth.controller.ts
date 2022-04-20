@@ -50,6 +50,7 @@ const login = async (req: Request, res: Response) => {
  * @returns 
  */
 async function register(req: Request, res: Response, _next: NextFunction) {
+    console.log("req.body: ", req.body)
     const newUser = req.body;
 
     if (!newUser.email || !newUser.password) {
@@ -73,9 +74,10 @@ async function register(req: Request, res: Response, _next: NextFunction) {
 
     Object.assign(user, newUser);
 
-    await getRepository(User).save(user).catch((_err) => {
-        return res.status(500).send("Could not add user");
-    })
+    await getRepository(User).save(user).
+        catch((_err) => {
+            return res.status(500).send("Could not add user");
+        })
 
     if (!process.env.JWT_SECRET) {
         throw new BadRequestError("proces.env.JWT_SECRET is not given");
