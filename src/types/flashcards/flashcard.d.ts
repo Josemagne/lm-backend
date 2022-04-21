@@ -1,3 +1,4 @@
+import { Descendant } from 'slate';
 export declare interface LM_Flashcard {
     flashcard_id: string;
     /**
