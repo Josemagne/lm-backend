@@ -13,6 +13,11 @@ export class Commentary extends BaseEntity {
     @Column({ nullable: true })
     chapter_id: string;
 
+    @Column({
+        nullable: true
+    })
+    citation_id: string;
+
     @Column({ default: '' })
     data: string;
 

@@ -1,18 +1,27 @@
+import { LM_Book } from "../Book/book";
 import { LM_User } from "./user";
 
-export default interface LM_Metadata {
+export declare interface LM_Metadata {
     /**
-     * Amount of books that are stored
+     * Books that are in the server
      */
-    amountOfBooks: number;
-    /**
-     * Indicates if the user is logged in
-     */
-    isLoggedIn: boolean;
-    /**
-     * Contains the book_id strings of the added books
-     */
-    books: string[];
+    serverBooks: {
+        amount: number;
+        /**
+         * the book_id strings for the book on the server
+         */
+        books: string[];
+    };
+    frontendBooks: {
+        /**
+         * Amount of books in the frontend
+         */
+        amount: number;
+        /**
+         * book_id strings for the books that are in the frontend
+         */
+        books: string[];
+    };
     /**
      * book_id strings of the books that are not saved in the backend
      */
@@ -25,5 +34,9 @@ export default interface LM_Metadata {
      * Contains an array of book_id strings
      */
     favoriteBooks: string[];
+    /**
+     * Books that are not synchronized
+     */
+    unSynchronizedBooks: LM_Book[]
 
 }

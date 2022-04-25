@@ -2,7 +2,7 @@ import { BaseEntity, Column, Entity, PrimaryColumn } from 'typeorm';
 
 
 @Entity("citations")
-export class Citation extends BaseEntity {
+export default class Citation extends BaseEntity {
     @PrimaryColumn()
     citation_id: string;
 
@@ -21,5 +21,5 @@ export class Citation extends BaseEntity {
         default: '',
         nullable: false
     })
-    data: string;
+    citation: string;
 }

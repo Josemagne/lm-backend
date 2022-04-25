@@ -1,0 +1,1 @@
+export type ScriptureStatus = "TO_READ" | "READ" | "READING" | "SUMMARIZED" | "FLASHCARD_FINISHED";
