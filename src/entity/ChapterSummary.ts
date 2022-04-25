@@ -1,7 +1,7 @@
 import { Entity, BaseEntity, PrimaryColumn, Column } from 'typeorm';
 
-@Entity("summaries")
-export class Summary extends BaseEntity {
+@Entity("chaptersummary")
+export default class ChapterSummary extends BaseEntity {
 
     @PrimaryColumn()
     summary_id: string
@@ -10,11 +10,13 @@ export class Summary extends BaseEntity {
     user_id: string;
 
     @Column()
-    chapter_id: string | null;
+    chapter_id: string;
 
     @Column()
     book_id: string;
 
     @Column()
-    data: string;
+    summary: string;
+
+
 }
