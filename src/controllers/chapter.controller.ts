@@ -3,7 +3,6 @@ import Chapter from '../entity/Chapter';
 import { getManager, getRepository } from 'typeorm';
 import logger from '../utils/logger';
 import LM_Chapter from 'src/types/Book/chapter';
-import ChapterSummary from 'src/entity/ChapterSummary';
 
 /**
  * Saves the chapter in the backend
@@ -90,26 +89,12 @@ const updateChapter = async (req: Request<{}, {}, LM_Chapter>, res: Response, _n
     chapter.read = updatedChapter.read;
     chapter.importance = updatedChapter.importance;
     chapter.summary = updatedChapter.summary;
-    chapter.isSubchapter = updatedChapter.isSubchapter;
-    chapter.index = updatedChapter.index;
+    //chapter.index = updatedChapter.index;
     chapter.parentChapter = updatedChapter.parentChapter ?? "";
 
     // await getRepository(Chapter).createQueryBuilder().where("chapter_id = :chapter_id", { chapter_id: updatedChapter.chapter_id }).delete().execute();
 
     // await getRepository(Chapter).createQueryBuilder().insert().values(chapter).execute();
-
-    // TODO Summaries
-
-    // TODO Flashcards
-
-    // TODO Notes
-
-    // TODO Commentaries
-
-    // TODO Glossary
-
-    // TODO Loanword
-
 
     await getRepository(Chapter).createQueryBuilder().update(Chapter).set(chapter).where("chapter_id = :chapter_id", { chapter_id: updatedChapter.chapter_id }).andWhere("user_id = :user_id", { user_id: user.user_id }).execute();
 
