@@ -3,7 +3,7 @@ import { getRepository, createConnection, getManager } from 'typeorm';
 import { Request, Response, NextFunction } from "express";
 import Book from "../entity/Book";
 import logger from '../utils/logger';
-import { LM_Book } from "src/types/Book/book";
+import {LM_Book} from "../types/Book/book"
 import Chapter from "../entity/Chapter";
 import Author from "../entity/Author";
 import { nanoid } from 'nanoid';

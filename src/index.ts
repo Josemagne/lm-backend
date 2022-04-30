@@ -17,14 +17,7 @@ import authorRouter from "./routes/auth.router";
 import dotenv from "dotenv"
 dotenv.config();
 
-let port = 0;
-
-// Get the port
-if (process.env.NODE_ENV === "development") {
-    port = 4000;
-} else {
-    port = 4000
-}
+const port = 4000;
 
 // TODO Pass the parameters from .env to createConnection()
 createConnection({

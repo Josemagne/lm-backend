@@ -15,6 +15,7 @@ const authenticationMiddleware = async (req: Request, res: Response, next: NextF
         return res.status(401).send("No token provided");
     }
 
+
     // Get the token
     const token = authHeader.split(' ')[1];
 
