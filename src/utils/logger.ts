@@ -1,5 +1,12 @@
-import pino from "pino";
+import logger from 'pino';
+import dayjs from 'dayjs';
 
-const logger = pino();
+const log = logger({
+    prettifier: true,
+    base: {
+        pid: false
+    },
+    timestamp: () => `,"time":"${dayjs().format()}`
+})
 
-export default logger;
+export default log;

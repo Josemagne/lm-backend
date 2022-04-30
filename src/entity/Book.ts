@@ -2,7 +2,7 @@ import { Entity, BaseEntity, Column, PrimaryColumn, CreateDateColumn, UpdateDate
 import Chapter from './Chapter';
 import Author from './Author';
 
-@Entity("books")
+@Entity("book")
 export default class Book extends BaseEntity {
     @PrimaryColumn({
         length: 21,
@@ -13,13 +13,16 @@ export default class Book extends BaseEntity {
     user_id: string;
 
     @Column()
+    author_id: string;
+
+    @Column()
     book_title: string;
 
     @Column()
     pages: number;
 
     @Column()
-    read: boolean;
+    status: string;
 
     @Column()
     progress: number;

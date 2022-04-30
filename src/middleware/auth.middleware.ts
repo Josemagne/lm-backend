@@ -7,18 +7,16 @@ dotenv.config()
 
 // @ts-ignore
 const authenticationMiddleware = async (req: Request, res: Response, next: NextFunction) => {
-    console.log(req.headers.authorization)
     const authHeader = req.headers.authorization;
-    console.log("authHeader", authHeader)
 
-
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    // TODO Must have a token after Bearer
+// @ts-ignore
+    if (!authHeader || !authHeader.startsWith('Bearer ') && new RegExp("\w{21,}").exec(authHeader.split(' ')[1])) {
         return res.status(401).send("No token provided");
     }
 
     // Get the token
     const token = authHeader.split(' ')[1];
-
 
     try {
 

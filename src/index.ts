@@ -13,11 +13,8 @@ import { join } from "path";
 import chapterRouter from './routes/chapter.router';
 import { User } from './entity/User';
 import authRouter from './routes/auth.router';
+import authorRouter from "./routes/auth.router";
 import dotenv from "dotenv"
-import BookSummary from "./entity/BookSummary";
-import ChapterSummary from "./entity/ChapterSummary";
-import BookFlashcard from "./entity/BookFlashcard";
-import ChapterFlashcard from "./entity/ChapterFlashcard";
 dotenv.config();
 
 let port = 0;
@@ -37,7 +34,7 @@ createConnection({
     username: process.env.POSTGRES_USER,
     password: process.env.POSTGRES_PASSWORD,
     database: "librimem",
-    entities: [Book, Chapter, Author, User, BookSummary, ChapterSummary, BookFlashcard, ChapterFlashcard],
+    entities: [Book, Chapter, Author, User],
     synchronize: true
 }).then(async connection => {
 
@@ -56,9 +53,15 @@ createConnection({
     app.options('*', cors())
 
     /* Book routes */
-    app.use("/api/books", bookRouter);
-    app.use("/api/chapters", chapterRouter);
-    app.use("/api/auth", authRouter)
+    app.use("/api/v1/book", bookRouter);
+    app.use("/api/v1/chapter", chapterRouter);
+    app.use("/api/v1/auth", authRouter)
+    app.use("/api/v1/author", authorRouter);
+    //TODO 
+    //app.use("/api/v1/flashcard", flashcardRouter)
+  //  app.use("api/v1/question", questionRouter)
+  //  app.use("api/v1/summary", summaryRouter)
+  //  app.use("api/v1/word", wordRouter)
 
     // start express server
     app.listen(port, () => {

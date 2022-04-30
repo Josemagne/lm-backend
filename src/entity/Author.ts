@@ -9,13 +9,13 @@ export default class Author extends BaseEntity {
     @Column()
     user_id: string;
 
-    // @Column()
-    // author_prename: string;
+     @Column()
+     author_prename: string;
 
-    // @Column()
-    // author_name: string;
+     @Column()
+     author_name: string;
 
-    @Column({ type: "simple-array" })
+    @Column({ type: "simple-array" , nullable: true})
     books: Book[];
 
     @Column()

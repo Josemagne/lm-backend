@@ -50,48 +50,40 @@ const login = async (req: Request, res: Response) => {
  * @param _next 
  * @returns 
  */
-async function register(req: Request, res: Response, _next: NextFunction) {
-    console.log("req.body: ", req.body)
-    const newUser = req.body;
+async function register(req: Request, res: Response, ) {
+    const {email, password}= req.body;
 
-    if (!newUser.email || !newUser.password) {
+    if (!email || !password) {
         return res.status(400).send("Please provide email and password");
     }
 
     const user_id = nanoid();
-    newUser.user_id = user_id;
 
     const user = new User();
+    user.user_id = user_id;
 
     // Check if user already exists
-    const oldUser = await getRepository(User).findOne({ where: { email: newUser.email } });
+    const oldUser = await getRepository(User).findOne({ where: { email: email } });
     if (oldUser) {
         return res.status(409).send("User already exists");
     }
 
     // Encrypt password
-    const encryptedPassword = await bcrypt.hashSync(newUser.password, 10);
-    newUser.password = encryptedPassword;
-
-    console.log("newUser: ", newUser)
-    Object.assign(user, newUser);
-
+    const encryptedPassword = await bcrypt.hashSync(password, 10);
+    user.password = encryptedPassword;
 
     if (!process.env.JWT_SECRET) {
         throw new BadRequestError("proces.env.JWT_SECRET is not given");
     }
-    const token = jwt.sign({ email: newUser.email, user_id: newUser.user_id }, process.env.JWT_SECRET, {
+    const token = jwt.sign({ email: email, user_id: user_id }, process.env.JWT_SECRET, {
         expiresIn: '30d'
     })
 
     user.token = token;
     await getRepository(User).save(user).
-        catch((_err) => {
+        catch(() => {
             return res.status(500).send("Could not add user");
         })
-
-    console.log("token: ", jwt.verify(token, process.env.JWT_SECRET))
-
 
     return res.status(200).json({ token, result: "success" })
 

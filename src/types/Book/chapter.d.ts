@@ -32,6 +32,7 @@ export default interface LM_Chapter {
      * Date when the chapter has been read
      */
     ended: Date | null;
+    index?: string;
     flashcards?: {
         [id: string]: LM_Flashcard;
     }
