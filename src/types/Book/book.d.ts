@@ -11,16 +11,14 @@ export declare interface LM_Book {
      * Unique id that identifies the book
      */
     book_id: string | LM_EntityID;
-
+    author_id: string;
     author_prename: string;
     author_name: string;
     book_title: string;
-    author_id: string;
-    pages: number;
+    pages?: number;
     /**
      * Decides if the book is finished
      */
-    read: boolean;
     genre: string;
     /**
      * Status of the book.

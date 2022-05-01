@@ -1,6 +1,5 @@
-import { Entity, BaseEntity, Column, PrimaryColumn, CreateDateColumn, UpdateDateColumn, OneToMany, ManyToMany } from "typeorm";
-import Chapter from './Chapter';
-import Author from './Author';
+import { Entity, BaseEntity, Column, PrimaryColumn, CreateDateColumn, UpdateDateColumn, OneToMany, ManyToOne} from "typeorm";
+import {Chapter, Author, User} from "./"
 
 @Entity("book")
 export default class Book extends BaseEntity {
@@ -43,12 +42,15 @@ export default class Book extends BaseEntity {
     @UpdateDateColumn()
     updatedAt: Date;
 
+    @ManyToOne(() => User, (user) => user.books)
+    user: User;
+
     @OneToMany(() => Chapter, (chapter) => chapter.book, {
         cascade: ['insert', 'update'],
     })
     chapter: Chapter[];
 
-    @ManyToMany(() => Author)
+    @ManyToOne(() => Author)
     author: Author;
 
 }

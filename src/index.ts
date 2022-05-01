@@ -5,16 +5,14 @@ import express from "express";
 import cors from "cors";
 import pino from 'pino-http';
 // NOTE Entities
-import Book from "./entity/Book";
-import Chapter from "./entity/Chapter";
-import Author from './entity/Author';
+import {User, Book, Author,Chapter, Flashcard, Summary} from "./entity";
 import bookRouter from './routes/book.router';
 import { join } from "path";
 import chapterRouter from './routes/chapter.router';
-import { User } from './entity/User';
 import authRouter from './routes/auth.router';
 import authorRouter from "./routes/auth.router";
 import dotenv from "dotenv"
+import summaryRouter from "./routes/summary.router"
 dotenv.config();
 
 const port = 4000;
@@ -27,10 +25,9 @@ createConnection({
     username: process.env.POSTGRES_USER,
     password: process.env.POSTGRES_PASSWORD,
     database: "librimem",
-    entities: [Book, Chapter, Author, User],
+    entities: [Book, Chapter, Author,  Flashcard, Summary, User],
     synchronize: true
-}).then(async connection => {
-
+}).then(async (connection) => {
 
     // create express app
     const app = express();
@@ -51,9 +48,9 @@ createConnection({
     app.use("/api/v1/auth", authRouter)
     app.use("/api/v1/author", authorRouter);
     //TODO 
+    app.use("api/v1/summary", summaryRouter)
     //app.use("/api/v1/flashcard", flashcardRouter)
   //  app.use("api/v1/question", questionRouter)
-  //  app.use("api/v1/summary", summaryRouter)
   //  app.use("api/v1/word", wordRouter)
 
     // start express server

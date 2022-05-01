@@ -15,9 +15,6 @@ export default class Author extends BaseEntity {
      @Column()
      author_name: string;
 
-    @Column({ type: "simple-array" , nullable: true})
-    books: Book[];
-
     @Column()
     favorite: boolean;
 

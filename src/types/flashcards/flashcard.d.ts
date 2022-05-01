@@ -1,3 +1,4 @@
+export declare type FlashcardType = "BOOK" | "CHAPTER" | "SUBCHAPTER" | "ARTICLE";
 export declare interface LM_Flashcard {
     flashcard_id: string;
     /**

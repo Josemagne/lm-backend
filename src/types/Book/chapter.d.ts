@@ -1,6 +1,8 @@
 import LM_Summary from './summary';
-import { LM_Flashcard } from '../flashcards/flashcard';
+import { Descendant } from 'slate';
+import { LM_Flashcard } from '../Flashcard/flashcard';
 import { LM_Citation } from './citation';
+import { LM_EntityStatus } from "../Entity/entity"
 export default interface LM_Chapter {
     chapter_id: string;
     /**
@@ -11,10 +13,9 @@ export default interface LM_Chapter {
      * book_id of the book
      */
     book_id: string;
-    /**
-     * Decides if the chapter should be read
-     */
-    toRead: boolean;
+    index?: string;
+
+    status: LM_EntityStatus;
     /**
      * Importance is a number from 1 to 100 where 1 indicate that it is not important and 100 that it is of outmost importance
      */
@@ -22,36 +23,44 @@ export default interface LM_Chapter {
     /**
      * Indicates if the chapter is read.
      */
-    read: boolean;
     summary: string;
+    /**
+     * IDs of the multiple Flashcard objs
+     */
+    commentary: string;
+    flashcards?: string[]
+    /**
+     * IDs of the multiple SubChapter objs
+     */
+    subChapters?: string[];
+    /**
+     * IDs of the multiple Note objs
+     */
+    notes: string[];
+    /**
+     * IDs of the multiple Picture objs
+     */
+    pictures: string[];
+    /**
+     * IDs of the keywords that belong to this chapter
+     */
+    keyWords: string[]
+    /**
+     * IDs of the LoanWord objs
+     */
+    loanWords: string[]
+    /**
+     * IDs of the GlossaryWord objs
+     */
+    glossaryWords: string[]
     /**
      * Date when the chapter has started to be read
      */
-    started: Date | null;
+    started: Date | undefined;
     /**
      * Date when the chapter has been read
      */
-    ended: Date | null;
-    index?: string;
-    flashcards?: {
-        [id: string]: LM_Flashcard;
-    }
-    /**
-     * The degree of the chapter
-     * E.g. 1 --> x.1
-     * E.g. 2 --> x.1.1
-     */
-    degree?: number | null;
-    /**
-     * ID of the parent chapter
-     */
-    parentChapter?: string | null;
-    citations?: {
-        [citation_id: string]: LM_Citation;
-    }
-
-}
-
-export interface LM_Subchapter extends LM_Chapter {
-    isSubchapter: boolean;
+    ended: Date | undefined;
+    createdAt: Date;
+    updatedAt: Date;
 }

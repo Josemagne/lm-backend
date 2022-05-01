@@ -1,7 +1,7 @@
 import { Entity, BaseEntity, Column, PrimaryColumn, CreateDateColumn, UpdateDateColumn, ManyToOne } from 'typeorm';
-import Book from './Book';
+import {Book, User} from "."
 
-@Entity("chapters")
+@Entity("chapter")
 export default class Chapter extends BaseEntity {
 
     @PrimaryColumn()
@@ -46,14 +46,6 @@ export default class Chapter extends BaseEntity {
     })
     summary: string;
 
-    // @Column(
-    //     {
-    //         nullable: true,
-    //         array: true,
-    //         type: "text"
-    //     }
-    // )
-
     @Column({
         nullable: false,
         default: false
@@ -84,10 +76,12 @@ export default class Chapter extends BaseEntity {
     })
     ended: Date | null;
 
-    @ManyToOne(() => Book, (book) => book.chapter, {
+    @ManyToOne(() => User, user => user.chapters)
+    user: User;
+
+    @ManyToOne(() =>Book, (book) => book.chapter, {
         cascade: ['insert', 'update']
     })
-    // @JoinColumn({ name: "JoinColumn_book_chapter" })
     book: Book;
 
 
