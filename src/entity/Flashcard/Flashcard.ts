@@ -5,6 +5,9 @@ import {User} from "./../"
 export default class Flaschard extends BaseEntity {
   @PrimaryColumn()
   flashcard_id: string;
+  
+  @Column()
+  user_id: string;
 
   @Column()
   flashcardType: string;
