@@ -11,8 +11,9 @@ import path  from "path";
 import chapterRouter from './routes/chapter.router';
 import authRouter from './routes/auth.router';
 import authorRouter from "./routes/auth.router";
-import dotenv from "dotenv"
 import summaryRouter from "./routes/summary.router"
+import flashcardRouter from "./routes/flashcard.router"
+import dotenv from "dotenv"
 dotenv.config();
 
 const port = 4000;
@@ -49,7 +50,7 @@ createConnection(
     app.use("/api/v1/author", authorRouter);
     //TODO 
     app.use("api/v1/summary", summaryRouter)
-    //app.use("/api/v1/flashcard", flashcardRouter)
+    app.use("/api/v1/flashcard", flashcardRouter)
   //  app.use("api/v1/question", questionRouter)
   //  app.use("api/v1/word", wordRouter)
 
