@@ -23,14 +23,14 @@ export default class Chapter extends BaseEntity {
     )
     title: string;
 
-    @Column()
-    status: string;
-
     @Column({
         type: "numeric",
         nullable: true
     })
     importance: number;
+
+    @Column()
+    status: string;
 
     @Column({
         nullable: true

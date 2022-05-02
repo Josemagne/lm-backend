@@ -16,15 +16,17 @@ const saveChapter = async (req: Request, res: Response, ) => {
 
     const chapter = new Chapter();
 
-    const {chapter_id, title, book_id, status, importance, summary  } = req.body;
+    const {chapter_id, title, book_id, status, importance, summary  , index} = req.body;
 
-    Object.assign({chapter_id, title, book_id, status, importance, summary }, chapter);
+    Object.assign(chapter, {chapter_id, title, book_id,summary, index, status, importance})
 
     chapter.user_id = user.user_id;
 
     await getRepository(Chapter).createQueryBuilder().insert().values(chapter).execute();
+  
+    logger.info("Added new chapter: ", chapter)
 
-    return res.status(200).json(chapter);
+    return res.status(200).json({result: "success"});
 
 }
 

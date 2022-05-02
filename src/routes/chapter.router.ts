@@ -5,7 +5,9 @@ import { deleteChapter, getChapter, getChapters, saveChapter, updateChapter } fr
 const chapterRouter = express.Router();
 
 chapterRouter.route("/").post(authenticationMiddleware, saveChapter);
-chapterRouter.route("/:bookId").get(authenticationMiddleware, getChapters).delete(authenticationMiddleware, deleteChapter);
-chapterRouter.route("/:chapterId").get(authenticationMiddleware, getChapter).post(authenticationMiddleware, updateChapter)
+
+chapterRouter.route("/chapters/:bookId").get(authenticationMiddleware, getChapters)
+
+chapterRouter.route("/:chapterId").get(authenticationMiddleware, getChapter).post(authenticationMiddleware, updateChapter).delete(authenticationMiddleware, deleteChapter);
 
 export default chapterRouter;

@@ -36,7 +36,7 @@ const addAuthor = async (req: Request, res: Response) => {
 
   await getRepository(Author).createQueryBuilder().insert().values(author).execute();
 
-  return res.status(200).json({result: "success"});
+  return res.status(200).json({result: "sucess"})
 }
 
 /**
@@ -55,8 +55,9 @@ const updateAuthor = async (req: Request, res: Response) => {
   author.favorite = favorite;
   author.books = books;
 
-  return await getRepository(Author).createQueryBuilder().update().where("user_id = :user_id" , {user_id: user.user_id}).andWhere("author_id = :author_id", {author_id: author_id}).execute();
+  await getRepository(Author).createQueryBuilder().update().where("user_id = :user_id" , {user_id: user.user_id}).andWhere("author_id = :author_id", {author_id: author_id}).execute();
 
+  return res.status(200).json({result: "success"})
 }
 
 /**
@@ -69,7 +70,9 @@ const deleteAuthor = async (req: Request, res: Response) => {
   
   const authorId = req.params.authorId;
 
-  return await getRepository(Author).createQueryBuilder().delete().where("user_id = :user_id", {user_id: user.user_id}).andWhere("author_id = :author_id",  {author_id: authorId}).execute();
+  await getRepository(Author).createQueryBuilder().delete().where("user_id = :user_id", {user_id: user.user_id}).andWhere("author_id = :author_id",  {author_id: authorId}).execute();
+
+  return res.status(200).json({result: "success"})
 
 }
 
