@@ -7,7 +7,7 @@ import pino from 'pino-http';
 // NOTE Entities
 import {User, Book, Author,Chapter, Flashcard, Summary} from "./entity";
 import bookRouter from './routes/book.router';
-import { join } from "path";
+import path  from "path";
 import chapterRouter from './routes/chapter.router';
 import authRouter from './routes/auth.router';
 import authorRouter from "./routes/auth.router";
@@ -18,17 +18,17 @@ dotenv.config();
 const port = 4000;
 
 // TODO Pass the parameters from .env to createConnection()
-createConnection({
+createConnection(
+  {host: process.env.NODE_ENV === "development" ? "lm-backend-db" : process.env.POSTGRES_HOST,
+  port: 5432,
     type: "postgres",
-    host: process.env.NODE_ENV === "development" ? "lm-backend-db" : process.env.POSTGRES_HOST,
-    port: 5432,
-    username: process.env.POSTGRES_USER,
-    password: process.env.POSTGRES_PASSWORD,
-    database: "librimem",
-    entities: [Book, Chapter, Author,  Flashcard, Summary, User],
-    synchronize: true
-}).then(async (connection) => {
-
+  username: process.env.POSTGRES_USER,
+  password: process.env.POSTGRES_PASSWORD,
+  database: "librimem",
+   synchronize: true,
+  entities: [User, Book, Flashcard, Chapter, Summary, Author],
+}
+).then(async (connection) => {
     // create express app
     const app = express();
     app.use(bodyParser.json());

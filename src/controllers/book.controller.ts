@@ -28,7 +28,7 @@ const addBook = async (req: Request, res: Response) => {
     newBook.author_id = author_id;
     newBook.book_id = book_id;
     newBook.book_title = book_title;
-    newBook.pages = pages;
+    newBook.pages = pages ?? 0;
     newBook.status = status;
     newBook.progress = progress;
 
@@ -102,7 +102,7 @@ const { book_id, author_prename, author_name, book_title, pages, status, progres
     updatedBook.user_id = user.user_id;
     updatedBook.book_id = book_id;
     updatedBook.book_title = book_title;
-    updatedBook.pages = pages;
+    updatedBook.pages = pages ?? 0;
     updatedBook.status = status;
 
     await getRepository(Book).createQueryBuilder().update(Book).set(updatedBook).where("book_id = :book_id", { book_id: updatedBook.book_id }).andWhere("user_id = :user_id", { user_id: user.user_id }).execute();

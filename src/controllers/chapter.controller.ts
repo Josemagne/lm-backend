@@ -10,13 +10,15 @@ import LM_Chapter from 'src/types/Book/chapter';
  * @param res 
  * @param _next 
  */
-const saveChapter = async (req: Request, res: Response, _next: NextFunction) => {
+const saveChapter = async (req: Request, res: Response, ) => {
 
     const user = res.locals.user;
 
     const chapter = new Chapter();
-    // NOTE Assigns the enumerable props of req.body to chapter!!!
-    Object.assign(chapter, req.body);
+
+    const {chapter_id, title, book_id, status, importance, summary  } = req.body;
+
+    Object.assign({chapter_id, title, book_id, status, importance, summary }, chapter);
 
     chapter.user_id = user.user_id;
 
@@ -33,7 +35,7 @@ const saveChapter = async (req: Request, res: Response, _next: NextFunction) => 
  * @param _next 
  * @returns 
  */
-const getChapters = async (req: Request, res: Response, _next: NextFunction) => {
+const getChapters = async (req: Request, res: Response, ) => {
     const user = res.locals.user;
     const bookId = req.params.bookId;
 
@@ -57,7 +59,7 @@ const getChapters = async (req: Request, res: Response, _next: NextFunction) => 
  * @param res 
  * @param _next 
  */
-const getChapter = async (req: Request, res: Response, _next: NextFunction) => {
+const getChapter = async (req: Request, res: Response, ) => {
     const user = res.locals.user;
 
     const chapterId = req.params.chapterId;
@@ -73,7 +75,7 @@ const getChapter = async (req: Request, res: Response, _next: NextFunction) => {
  * @param res 
  * @param _next 
  */
-const updateChapter = async (req: Request<{}, {}, LM_Chapter>, res: Response, _next: NextFunction) => {
+const updateChapter = async (req: Request, res: Response, _next: NextFunction) => {
 
     const user = res.locals.user;
 
@@ -81,20 +83,9 @@ const updateChapter = async (req: Request<{}, {}, LM_Chapter>, res: Response, _n
 
     const chapter = new Chapter();
 
-    chapter.book_id = updatedChapter.book_id;
-    chapter.chapter_id = updatedChapter.chapter_id;
-    chapter.user_id = user.user_id;
-    chapter.title = updatedChapter.title;
-    chapter.toRead = updatedChapter.toRead;
-    chapter.read = updatedChapter.read;
-    chapter.importance = updatedChapter.importance;
-    chapter.summary = updatedChapter.summary;
-    //chapter.index = updatedChapter.index;
-    chapter.parentChapter = updatedChapter.parentChapter ?? "";
+    const {chapter_id, title, book_id, status, importance, summary  } = req.body;
 
-    // await getRepository(Chapter).createQueryBuilder().where("chapter_id = :chapter_id", { chapter_id: updatedChapter.chapter_id }).delete().execute();
-
-    // await getRepository(Chapter).createQueryBuilder().insert().values(chapter).execute();
+    Object.assign({chapter_id, title, book_id, status, importance, summary }, chapter);
 
     await getRepository(Chapter).createQueryBuilder().update(Chapter).set(chapter).where("chapter_id = :chapter_id", { chapter_id: updatedChapter.chapter_id }).andWhere("user_id = :user_id", { user_id: user.user_id }).execute();
 

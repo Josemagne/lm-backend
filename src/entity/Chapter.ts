@@ -23,17 +23,8 @@ export default class Chapter extends BaseEntity {
     )
     title: string;
 
-    @Column(
-        {
-            default: false
-        }
-    )
-    toRead: boolean;
-
-    @Column({
-        default: false
-    })
-    read: boolean;
+    @Column()
+    status: string;
 
     @Column({
         type: "numeric",
@@ -47,22 +38,9 @@ export default class Chapter extends BaseEntity {
     summary: string;
 
     @Column({
-        nullable: false,
-        default: false
-    })
-    isSubchapter: boolean;
-
-    @Column({
         nullable: false
     })
     index: string;
-
-    @Column(
-        {
-            nullable: true
-        }
-    )
-    parentChapter: string;
 
     @CreateDateColumn(
         {
@@ -79,7 +57,7 @@ export default class Chapter extends BaseEntity {
     @ManyToOne(() => User, user => user.chapters)
     user: User;
 
-    @ManyToOne(() =>Book, (book) => book.chapter, {
+    @ManyToOne(() =>Book, (book) => book.chapters, {
         cascade: ['insert', 'update']
     })
     book: Book;

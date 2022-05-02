@@ -32,8 +32,11 @@ const addAuthor = async (req: Request, res: Response) => {
   author.author_name = author_name;
   author.user_id = author_id;
   author.favorite = favorite;
+  author.user_id = user.user_id;
 
-  return await getRepository(Author).createQueryBuilder().insert().values(author).execute();
+  await getRepository(Author).createQueryBuilder().insert().values(author).execute();
+
+  return res.status(200).json({result: "success"});
 }
 
 /**

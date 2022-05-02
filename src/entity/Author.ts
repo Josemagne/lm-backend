@@ -1,7 +1,7 @@
 import { Entity, BaseEntity, PrimaryColumn, Column, ManyToMany, JoinTable } from 'typeorm';
 import Book from './Book';
 
-@Entity("authors")
+@Entity("author")
 export default class Author extends BaseEntity {
     @PrimaryColumn()
     author_id: string;
@@ -12,7 +12,7 @@ export default class Author extends BaseEntity {
      @Column()
      author_prename: string;
 
-     @Column()
+     @Column({nullable: true, type: "varchar"})
      author_name: string;
 
     @Column()
@@ -25,6 +25,6 @@ export default class Author extends BaseEntity {
             name: "books", referencedColumnName: "book_id"
         }
     })
-    book: Book[];
+    books: Book[];
 
 }
