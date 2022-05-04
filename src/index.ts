@@ -17,6 +17,7 @@ import dotenv from "dotenv"
 dotenv.config();
 
 const port = 4000;
+let app: any;
 
 // TODO Pass the parameters from .env to createConnection()
 createConnection(
@@ -31,7 +32,7 @@ createConnection(
 }
 ).then(async (connection) => {
     // create express app
-    const app = express();
+    app = express();
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: false }))
     app.use(pino())
@@ -49,8 +50,8 @@ createConnection(
     app.use("/api/v1/auth", authRouter)
     app.use("/api/v1/author", authorRouter);
     //TODO 
-    app.use("api/v1/summary", summaryRouter)
-    app.use("/api/v1/flashcard", flashcardRouter)
+    app.use("api/v1", summaryRouter)
+    app.use("/api/v1", flashcardRouter)
   //  app.use("api/v1/question", questionRouter)
   //  app.use("api/v1/word", wordRouter)
 
@@ -60,3 +61,5 @@ createConnection(
     })
 
 }).catch(error => console.log(error));
+
+export default app;

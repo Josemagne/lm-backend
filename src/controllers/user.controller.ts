@@ -1,6 +1,6 @@
 import { getRepository } from 'typeorm';
 import { Request, Response, NextFunction } from 'express';
-import { User } from '../entity/User';
+import {User} from "../entity"
 
 
 

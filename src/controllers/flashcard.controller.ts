@@ -4,12 +4,18 @@ import {Flashcard } from '../entity';
 
 const addFlashcard = async (req: Request, res: Response) => {
     const user = res.locals.user;
+
     const {flashcard_id, question, answer, bookcollection_id, book_id, subchapter_id, articlecollection_id, article_id, flashcardType  }= req.body;
 
     const flashcard = new Flashcard();
     flashcard.user_id = user.user_id
 
-    Object.assign(flashcard, {flashcard_id,question, answer, bookcollection_id, book_id, subchapter_id, articlecollection_id, article_id, flashcardType });
+    flashcard.flashcard_id = flashcard_id;
+    flashcard.question = question;
+    flashcard.answer = answer;
+    flashcard.bookcollection_id = bookcollection_id;
+    flashcard.book_id = book_id;
+    flashcard.flashcardType = flashcardType;
 
     await getRepository(Flashcard).createQueryBuilder().insert().values(flashcard).execute();
 
@@ -27,19 +33,34 @@ const getFlashcard = async (req: Request, res: Response) => {
 }
 
 const getFlashcards = async (req: Request, res: Response) => {
-  const user = res.locals.params;
+  console.log("Calleddd!!!")
+  const user = res.locals.user;
 
   const bookId = req.params.bookId
+  console.log("bookId is: ", bookId)
   
-    const flashcards = await getRepository(Flashcard).createQueryBuilder().where("book_id = :book_id", {book_id: bookId}).andWhere("user_id = :user_id", {user_id: user.user_id}).execute()
+    const flashcards = await getRepository(Flashcard).createQueryBuilder().where("book_id = :book_id", {book_id: bookId}).andWhere("user_id = :user_id", {user_id: user.user_id}).getMany();
+
+  console.log("Flashcard:", flashcards);
 
     return res.status(200).json({ result: "success", flashcards: flashcards });
 }
 
 const updateFlashcard = async (req: Request, res: Response) => {
-    const updatedFlashcard = req.body;
+  const user = res.locals.user
+    const {flashcard_id, question, answer, bookcollection_id, book_id, subchapter_id, articlecollection_id, article_id, flashcardType  }= req.body;
 
-    const newFlashcard = await getRepository(Flashcard).createQueryBuilder().update().set(updatedFlashcard).where("flashcard_id = :flashcard_id", { flashcard_id: updatedFlashcard.flashcard_id })
+    const flashcard = new Flashcard();
+    flashcard.user_id = user.user_id
+
+    flashcard.flashcard_id = flashcard_id;
+    flashcard.question = question;
+    flashcard.answer = answer;
+    flashcard.bookcollection_id = bookcollection_id;
+    flashcard.book_id = book_id;
+    flashcard.flashcardType;
+
+    const newFlashcard = await getRepository(Flashcard).createQueryBuilder().update().set(flashcard).where("flashcard_id = :flashcard_id", { flashcard_id: flashcard.flashcard_id }).execute();
 
     return res.status(200).json({ result: "success", flashcard: newFlashcard })
 }

@@ -9,8 +9,8 @@
     "start": "NODE_ENV=production node build/index.js",
     "build": "NODE_ENV=production npx tsc && cp .env build/.env",
     "typeorm": "ts-node ./node_modules/.bin/typeorm -f ./src/db/ormconfig.ts",
-  "migration:generate": "yarn run typeorm migration:generate -n",
-  "migration:blank": "yarn run typeorm migration:create -n"
+    "migration:generate": "yarn run typeorm migration:generate -n",
+    "migration:blank": "yarn run typeorm migration:create -n"
   },
   "keywords": [],
   "author": "",
@@ -19,6 +19,7 @@
     "@types/bcrypt": "^5.0.0",
     "@types/express": "^4.17.13",
     "@types/graphql": "^14.5.0",
+    "@types/jest": "^27.5.0",
     "@types/jsonwebtoken": "^8.5.8",
     "@types/nanoid": "^3.0.0",
     "@types/node": "^8.0.29",
@@ -29,6 +30,8 @@
     "@typescript-eslint/parser": "^5.20.0",
     "eslint": "^8.13.0",
     "eslint-plugin-react": "^7.29.4",
+    "supertest": "^6.2.3",
+    "ts-jest": "^28.0.0",
     "ts-node": "3.3.0",
     "ts-node-dev": "^1.1.8",
     "typescript": "^4.6.2"

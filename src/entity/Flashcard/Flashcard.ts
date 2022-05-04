@@ -2,7 +2,7 @@ import {BaseEntity, PrimaryColumn, Entity , Column, ManyToOne} from "typeorm"
 import {User} from "./../"
 
 @Entity("flashcard")
-export default class Flaschard extends BaseEntity {
+export default class Flashcard extends BaseEntity {
   @PrimaryColumn()
   flashcard_id: string;
   
@@ -12,22 +12,22 @@ export default class Flaschard extends BaseEntity {
   @Column()
   flashcardType: string;
 
-  @Column()
+  @Column({type: "char", length: 21, nullable: true})
   bookcollection_id: string
   
-  @Column()
+  @Column({type: "char", length: 21, nullable: true})
   book_id: string;
     
-  @Column()
+  @Column({type: "char", length: 21, nullable: true})
   chapter_id: string;
 
-  @Column()
+  @Column({type: "char", length: 21, nullable: true})
   subchapter_id: string;
 
-  @Column()
+  @Column({type: "char", length: 21, nullable: true})
   articlecollection_id: string;
 
-  @Column()
+  @Column({type: "char", length: 21, nullable: true})
   article_id: string;
 
   @Column()

@@ -17,7 +17,6 @@ const addSummary = async (req: Request, res: Response) => {
   summaryEntity.summary_id = summary_id;
   summaryEntity.summary = summary;
   summaryEntity.summaryType = summaryType;
-  summaryEntity.book_id = book_id;
   summaryEntity.bookcollection_id = bookcollection_id;
   summaryEntity.chapter_id = chapter_id;
   summaryEntity.subchapter_id = subchapter_id;

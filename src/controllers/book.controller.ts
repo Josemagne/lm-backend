@@ -62,12 +62,10 @@ const getBook = async (req: Request, res: Response) => {
 
     /* Return response */
 
-    if (book) {
-        res.status(200).json(book);
-    }
-    else {
+    if (!book) {
         res.status(404).send("Can't find the book.")
     }
+        return res.status(200).json({result: "success", book: book});
 }
 
 /**
@@ -83,7 +81,7 @@ const getAll = async (req: Request, res: Response) => {
 
     const books = await getRepository(Book).createQueryBuilder().where("user_id = :user_id", { user_id: user.user_id }).getMany();
 
-    return res.status(200).json({ books: books });
+    return res.status(200).json({ books: books, result: "success" });
 }
 
 /**

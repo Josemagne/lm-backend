@@ -15,23 +15,23 @@ export default class Summary extends BaseEntity {
   @Column()
   summaryType: string; 
 
-  @Column({type: "varchar", nullable: true})
-  bookcollection_id: string | null;
+  @Column({type: "char", nullable: true, length: 21})
+  bookcollection_id: string | undefined;
   
-  @Column({type: "varchar", nullable: true})
-  book_id: string | null
+  @Column({type: "char", nullable: true, length: 21})
+  book_id: string | undefined 
 
-  @Column({type: "varchar", nullable:  true})
-  articlecollection_id: string | null
+  @Column({type: "char", nullable: true, length: 21})
+  articlecollection_id: string | undefined
 
-  @Column({type: "varchar", nullable: true})
-  article_id: string  | null
+  @Column({type: "char", nullable: true, length: 21})
+  article_id: string  | undefined
 
-  @Column({type: "varchar", nullable: true})
-  chapter_id: string | null
+  @Column({type: "char", nullable: true, length: 21})
+  chapter_id: string | undefined
 
-  @Column({type: "varchar", nullable: true}) 
-  subchapter_id: string | null
+  @Column({type: "char", nullable: true, length: 21})
+  subchapter_id: string | undefined
 
   @ManyToOne(() => User, user => user.summaries)
   user: User;
