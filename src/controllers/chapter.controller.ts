@@ -18,14 +18,17 @@ const saveChapter = async (req: Request, res: Response, ) => {
 
     const {chapter_id, title, book_id, status, importance, summary  , index} = req.body;
 
-    Object.assign(chapter, {chapter_id, title, book_id,summary, index, status, importance})
-
+    chapter.chapter_id = chapter_id;
+    chapter.title = title;
+    chapter.book_id = book_id;
+    chapter.status = status;
+    chapter.importance = importance;
+    chapter.summary  =summary;
+    chapter.index = index;
     chapter.user_id = user.user_id;
 
     await getRepository(Chapter).createQueryBuilder().insert().values(chapter).execute();
   
-    logger.info("Added new chapter: ", chapter)
-
     return res.status(200).json({result: "success"});
 
 }
@@ -81,16 +84,20 @@ const updateChapter = async (req: Request, res: Response, _next: NextFunction) =
 
     const user = res.locals.user;
 
-    const updatedChapter = req.body;
+    const {chapter_id, title, book_id, status, importance, summary  , index} = req.body;
 
     const chapter = new Chapter();
 
-    const {chapter_id, title, book_id, status, importance, summary  } = req.body;
-
-    Object.assign({chapter_id, title, book_id, status, importance, summary }, chapter);
+    chapter.chapter_id = chapter_id;
+    chapter.title = title;
+    chapter.book_id = book_id;
+    chapter.status = status;
+    chapter.importance = importance;
+    chapter.summary  =summary;
+    chapter.index = index;
+    chapter.user_id = user.user_id;
 
     await getRepository(Chapter).createQueryBuilder().update(Chapter).set(chapter).where("chapter_id = :chapter_id", { chapter_id: updatedChapter.chapter_id }).andWhere("user_id = :user_id", { user_id: user.user_id }).execute();
-
 
     res.status(200).json(updatedChapter);
 }

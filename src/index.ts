@@ -46,7 +46,7 @@ createConnection(
 
     /* Book routes */
     app.use("/api/v1/book", bookRouter);
-    app.use("/api/v1/chapter", chapterRouter);
+    app.use("/api/v1", chapterRouter);
     app.use("/api/v1/auth", authRouter)
     app.use("/api/v1/author", authorRouter);
     //TODO 
