@@ -48,7 +48,6 @@ const getFlashcards = async (req: Request, res: Response) => {
 
 const updateFlashcard = async (req: Request, res: Response) => {
   const user = res.locals.user
-  	console.log("This is our flashcard: ", req.boxy)
     const {flashcard_id, question, answer, bookcollection_id, book_id, subchapter_id, articlecollection_id, article_id, flashcardType  }= req.body;
 
     const flashcard = new Flashcard();

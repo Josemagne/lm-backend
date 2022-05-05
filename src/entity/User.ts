@@ -1,7 +1,7 @@
 import { Entity, Column, PrimaryColumn, BaseEntity , OneToMany} from 'typeorm';
 import {Book, Chapter, Flashcard, Summary} from "../entity";
 
-@Entity("user")
+@Entity("users")
 export default class User extends BaseEntity {
 
     @PrimaryColumn()

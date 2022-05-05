@@ -58,12 +58,8 @@ const getBook = async (req: Request, res: Response) => {
     /* Query  */
     const book = await getRepository(Book).createQueryBuilder().where("book_id = :book_id", { book_id: bookId }).andWhere("user_id = :user_id", { user_id: user.user_id }).getOne();
 
-    logger.info("reslt: ", book)
-
-    /* Return response */
-
     if (!book) {
-        res.status(404).send("Can't find the book.")
+        res.status(404).send({result: "failure"})
     }
         return res.status(200).json({result: "success", book: book});
 }

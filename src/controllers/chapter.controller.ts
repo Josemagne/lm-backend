@@ -97,9 +97,9 @@ const updateChapter = async (req: Request, res: Response, _next: NextFunction) =
     chapter.index = index;
     chapter.user_id = user.user_id;
 
-    await getRepository(Chapter).createQueryBuilder().update(Chapter).set(chapter).where("chapter_id = :chapter_id", { chapter_id: updatedChapter.chapter_id }).andWhere("user_id = :user_id", { user_id: user.user_id }).execute();
+    await getRepository(Chapter).createQueryBuilder().update(Chapter).set(chapter).where("chapter_id = :chapter_id", { chapter_id: chapter_id }).andWhere("user_id = :user_id", { user_id: user.user_id }).execute();
 
-    res.status(200).json(updatedChapter);
+    res.status(200).json({result: "success"});
 }
 
 const deleteChapter = async (req: Request, res: Response) => {
