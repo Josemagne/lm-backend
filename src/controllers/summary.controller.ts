@@ -77,7 +77,7 @@ const updateSummary = async (req: Request, res: Response) => {
   summaryEntity.articlecollection_id = articlecollection_id;
   summaryEntity.article_id = article_id;
 
-  await getRepository(Summary).createQueryBuilder().update().where("user_id = :user_id", {user_id: user.user_id}).andWhere("summary_id = :summary_id", {summary_id: summary_id}).execute();
+  await getRepository(Summary).createQueryBuilder().update().set(summaryEntity).where("user_id = :user_id", {user_id: user.user_id}).andWhere("summary_id = :summary_id", {summary_id: summary_id}).execute();
 
 }
 

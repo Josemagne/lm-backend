@@ -15,6 +15,12 @@ export default class Book extends BaseEntity {
     author_id: string;
 
     @Column()
+    author_prename: string;
+
+    @Column({nullable: true, type: "varchar"})
+    author_name: string;
+
+    @Column()
     book_title: string;
 
     @Column()
@@ -50,7 +56,7 @@ export default class Book extends BaseEntity {
     })
     chapters: Chapter[];
 
-    @ManyToOne(() => Author)
+    @ManyToOne(() => Author, (author) => author.books )
     author: Author;
 
 }

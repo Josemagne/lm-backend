@@ -22,11 +22,13 @@ const addBook = async (req: Request, res: Response) => {
     const user = res.locals.user;
 
     const newBook = new Book();
-    const { author_id, book_id, book_title, pages, status, progress } = req.body as LM_Book;
+    const { author_id, book_id, book_title, pages, status, progress, author_prename, author_name } = req.body as LM_Book;
 
     newBook.user_id = user.user_id;
     newBook.author_id = author_id;
     newBook.book_id = book_id;
+    newBook.author_prename = author_prename;
+    newBook.author_name = author_name;
     newBook.book_title = book_title;
     newBook.pages = pages ?? 0;
     newBook.status = status;
@@ -49,8 +51,6 @@ const getBook = async (req: Request, res: Response) => {
     /* Get user authenticated user data */
     // NOTE We get this from the middleware auth.middleware.ts
     const user = res.locals.user;
-
-    console.log("The user is: ", user)
 
     /* Retrieve data for query */
     const bookId = req.params.bookId;

@@ -32,13 +32,13 @@ export default class Chapter extends BaseEntity {
     @Column()
     status: string;
 
-    @Column({
-        nullable: true
-    })
+    @Column(
+    )
     summary: string;
 
     @Column({
-        nullable: false
+        nullable: true,
+      type: "varchar"
     })
     index: string;
 
@@ -54,7 +54,9 @@ export default class Chapter extends BaseEntity {
     })
     ended: Date | null;
 
-    @ManyToOne(() => User, user => user.chapters)
+  @ManyToOne(() => User, user => user.chapters, {
+    cascade: ['insert', 'update']
+  })
     user: User;
 
     @ManyToOne(() =>Book, (book) => book.chapters, {

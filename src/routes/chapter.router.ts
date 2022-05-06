@@ -4,10 +4,10 @@ import { deleteChapter, getChapter, getChapters, saveChapter, updateChapter } fr
 
 const chapterRouter = express.Router();
 
-chapterRouter.route("/chapter").post(authenticationMiddleware, saveChapter);
-
 chapterRouter.route("/chapters/:bookId").get(authenticationMiddleware, getChapters)
 
-chapterRouter.route("chapter/:chapterId").get(authenticationMiddleware, getChapter).post(authenticationMiddleware, updateChapter).delete(authenticationMiddleware, deleteChapter);
+chapterRouter.route("/chapter/:chapterId").get(authenticationMiddleware, getChapter).post(authenticationMiddleware, updateChapter).delete(authenticationMiddleware, deleteChapter);
+
+chapterRouter.route("/chapter").post(authenticationMiddleware, saveChapter);
 
 export default chapterRouter;

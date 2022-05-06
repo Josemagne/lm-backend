@@ -4,6 +4,7 @@ import {getRepository} from "typeorm"
 import {Request, Response} from "express";
 import dotenv from "dotenv";
 dotenv.config();
+import UnauthenticatedError from "../errors/unauthenticated.error";
 
 export default async function authorizeUser(req: Request, res: Response) {
 	let token: string;
@@ -14,7 +15,11 @@ export default async function authorizeUser(req: Request, res: Response) {
 		return res.status(401).json({result: "failure"})
 	}	
 
-	const decoded = jwt.verify(token, process.env.JWT_SECRET as string)
+  if (!process.env.JWT_SECRET) {
+    throw new UnauthenticatedError("process.env.JWT_SECRET is not given");
+  }
+
+	const decoded = jwt.verify(token, process.env.JWT_SECRET )
 
 	console.log("decoded: ", decoded)
 
