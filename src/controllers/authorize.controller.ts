@@ -7,7 +7,7 @@ dotenv.config();
 import UnauthenticatedError from "../errors/unauthenticated.error";
 
 export default async function authorizeUser(req: Request, res: Response) {
-	let token: string;
+	let token: string | undefined;
 
 	try {
 		token = req.body.token;
@@ -19,6 +19,7 @@ export default async function authorizeUser(req: Request, res: Response) {
     throw new UnauthenticatedError("process.env.JWT_SECRET is not given");
   }
 
+  if (!token) return res.status(404).json({result: "failure"})
 	const decoded = jwt.verify(token, process.env.JWT_SECRET )
 
 	console.log("decoded: ", decoded)
