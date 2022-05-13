@@ -5,7 +5,7 @@ import {Flashcard } from '../entity';
 const addFlashcard = async (req: Request, res: Response) => {
     const user = res.locals.user;
 
-    const {flashcard_id, question, answer, bookcollection_id, book_id, subchapter_id, articlecollection_id, article_id, flashcardType  }= req.body;
+    const {flashcard_id, question, answer, bookcollection_id, book_id, subchapter_id, articlecollection_id, article_id, flashcardType, flashcardStatus }= req.body;
 
     const flashcard = new Flashcard();
     flashcard.user_id = user.user_id
@@ -16,6 +16,7 @@ const addFlashcard = async (req: Request, res: Response) => {
     flashcard.bookcollection_id = bookcollection_id;
     flashcard.book_id = book_id;
     flashcard.flashcardType = flashcardType;
+    flashcard.status = flashcardStatus;
 
     await getRepository(Flashcard).createQueryBuilder().insert().values(flashcard).execute();
 
@@ -48,7 +49,7 @@ const getFlashcards = async (req: Request, res: Response) => {
 
 const updateFlashcard = async (req: Request, res: Response) => {
   const user = res.locals.user
-    const {flashcard_id, question, answer, bookcollection_id, book_id, subchapter_id, articlecollection_id, article_id, flashcardType  }= req.body;
+    const {flashcard_id, question, answer, bookcollection_id, book_id, subchapter_id, articlecollection_id, article_id, flashcardType , flashcardStatus }= req.body;
 
     const flashcard = new Flashcard();
 
@@ -57,6 +58,7 @@ const updateFlashcard = async (req: Request, res: Response) => {
     flashcard.bookcollection_id = bookcollection_id;
     flashcard.book_id = book_id;
     flashcard.flashcardType;
+    flashcard.status = flashcardStatus;
 
     const newFlashcard = await getRepository(Flashcard).createQueryBuilder().update().set(flashcard).where("flashcard_id = :flashcard_id", { flashcard_id: flashcard.flashcard_id }).execute();
 

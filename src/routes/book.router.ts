@@ -14,5 +14,7 @@ const bookRouter = express.Router();
 // })
 
 bookRouter.route("/").get(authenticationMiddleware, getAll).post(authenticationMiddleware, addBook);
+
 bookRouter.route("/:bookId").delete(authenticationMiddleware, removeBook).post(authenticationMiddleware, updateBook).get(authenticationMiddleware, getBook);
+
 export default bookRouter;

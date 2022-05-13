@@ -10,6 +10,9 @@ export default class Flashcard extends BaseEntity {
   user_id: string;
 
   @Column()
+  status: string;
+
+  @Column()
   flashcardType: string;
 
   @Column({type: "char", length: 21, nullable: true})

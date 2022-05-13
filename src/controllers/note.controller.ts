@@ -1,20 +1,71 @@
 import { Response, Request } from 'express';
-const getNote = (req: Request, res: Response) => {
+import {getRepository} from "typeorm";
+import {Note} from "../entity"
+
+
+const getNote = async (req: Request, res: Response) => {
+  const noteId = req.params.noteId;
+  const user = res.locals.user;
+
+  const note = await getRepository(Note).createQueryBuilder().where("note_id = :note_id", {note_id: noteId}).execute();
+
+  return res.status(200).json({result: "success", note: note})
+}
+
+const getNotes = async (req: Request, res: Response) => {
+  const user = res.locals.user;
+
+  const notes =  await getRepository(Note).createQueryBuilder().where("user_id = :user_id", {user_id: user.user_id}).getMany();
+
+  return res.status(200).json({result: "success", notes: notes})
+}
+
+const addNote = async (req: Request, res: Response) => {
+  const user = res.locals.user;
+
+  const {note_id, note, title, book_id, createdAt, updatedAt} = req.body;
+
+  const newNote =  new Note();
+  newNote.note_id = note_id;
+  newNote.note = note;
+  newNote.title = title;
+  newNote.book_id = book_id;
+  newNote.createdAt = createdAt;
+  newNote.updatedAt = updatedAt;
+
+  await getRepository(Note).createQueryBuilder().insert().values(newNote).execute();
+
+  return res.status(200).json({result: "success"});
 
 }
 
-const getNotes = (req: Request, res: Response) => {
+const updateNote = async (req: Request, res: Response) => {
+  const user = res.locals.user;
+
+  const {note_id, note, title, book_id, createdAt, updatedAt} = req.body;
+
+  const newNote =  new Note();
+  newNote.note_id = note_id;
+  newNote.note = note;
+  newNote.title = title;
+  newNote.book_id = book_id;
+  newNote.createdAt = createdAt;
+  newNote.updatedAt = updatedAt;
+
+  await getRepository(Note).createQueryBuilder().update().set(newNote).where(`note_id = ${note_id}`).andWhere(`user_id = ${user.user_id}`).execute();
+
+  return res.status(200).json({result: "success"});
 
 }
 
-const addNote = (req: Request, res: Response) => {
+const deleteNote = async (req: Request, res: Response) => {
+  const user = res.locals.user;
+  const noteId = req.params.noteId;
+
+  await getRepository(Note).createQueryBuilder().delete().where(`user_id = ${user.user_id}`).andWhere(`note_id = ${noteId}`).execute();
+
+  return res.status(200).json({result: "success"});
 
 }
 
-const updateNote = (req: Request, res: Response) => {
-
-}
-
-const deleteNote = (req: Request, res: Response) => {
-
-}
+export {getNote, getNotes, addNote, updateNote, deleteNote};

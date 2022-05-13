@@ -31,7 +31,7 @@ const login = async (req: Request, res: Response) => {
     const user = await getRepository(User).createQueryBuilder().where("email = :email", { email: email }).getOne();
 
   if (!user) {
-    return res.status(404).json({result: "failure", reason: "User does not exists"})
+    return res.status(404).json({result: "failure", reason: "User does not exist."})
   }
 
     if (user && bcrypt.compareSync(password, user.password)) {

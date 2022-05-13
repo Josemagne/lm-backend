@@ -4,7 +4,8 @@ import User from "./User";
 import Author from "./Author"
 import Flashcard from "./Flashcard/Flashcard"
 import Summary from "./Summary/Summary"
+import Note from "./Note"
 //import Summary from "./Summary/Summary";
 
 
-export {Book, Chapter, User, Author, Flashcard, Summary}
+export {Book, Chapter, User, Author, Flashcard, Summary, Note};
