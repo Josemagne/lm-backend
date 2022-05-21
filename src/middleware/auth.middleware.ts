@@ -32,9 +32,6 @@ const authenticationMiddleware = async (req: Request, res: Response, next: NextF
         // @ts-ignore
         const { user_id, email } = decoded;
 
-        // NOTE If the jwt expired we want to renew it!
-        // @ts-ignore
-
         // @ts-ignore
         res.locals.user = { user_id, email }
 
@@ -58,6 +55,11 @@ const authenticationMiddleware = async (req: Request, res: Response, next: NextF
       }
 
       decoded = jwt.verify(token, process.env.JWT_SECRET)
+        // @ts-ignore
+        res.locals.user = { user_id, email }
+
+        // Go to controller
+        next();
     }
 
 }
