@@ -36,46 +36,37 @@ const authenticationMiddleware = async (
     // Decode token
     // Throws an err if expired
     console.log("last log:");
-    decoded = await jwt.verify(
-      token,
-      process.env.JWT_SECRET,
-      (err, decoded) => {
-        if (!process.env.JWT_SECRET) {
-          throw new UnauthenticatedError("process.env.JWT_SECRET is not given");
-        }
-        // If the token is expired
-        if (decoded.exp * 1000 < Date.now()) {
-          token = jwt.sign(
-            { email: email, user_id: user_id },
-            process.env.JWT_SECRET,
-            {
-              expiresIn: "30d",
-            }
-          );
-        }
+    decoded = await jwt.decode(token);
 
-        decoded = jwt.verify(token, process.env.JWT_SECRET);
-        return decoded;
-      }
-    );
+    if (!process.env.JWT_SECRET) {
+      throw new UnauthenticatedError("process.env.JWT_SECRET is not given");
+    }
     // @ts-ignore
     const { user_id, email } = decoded;
 
-    // @ts-ignore
-    res.locals.user = { user_id, email };
+    // If the token is expired
+    if (decoded.exp * 1000 < Date.now()) {
+      token = jwt.sign(
+        { email: email, user_id: user_id },
+        process.env.JWT_SECRET,
+        {
+          expiresIn: "30d",
+        }
+      );
+    }
 
     // Go to controller
     next();
+    decoded = await jwt.verify(token, process.env.JWT_SECRET);
   } catch (err) {
     console.log(err);
-
-    const { user_id, email } = decoded;
-    // @ts-ignore
-    res.locals.user = { user_id, email };
-
-    // Go to controller
-    next();
   }
+
+  // @ts-ignore
+  res.locals.user = { user_id, email };
+
+  // Go to controller
+  next();
 };
 
 export { authenticationMiddleware };
