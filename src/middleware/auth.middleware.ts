@@ -12,7 +12,6 @@ const authenticationMiddleware = async (
   next: NextFunction
 ) => {
   let decoded: any;
-  let token: any;
   const authHeader = req.headers.authorization;
 
   // TODO Must have a token after Bearer
@@ -26,45 +25,26 @@ const authenticationMiddleware = async (
   }
 
   // Get the token
-  token = authHeader.split(" ")[1];
+  const token = authHeader.split(" ")[1];
 
   try {
     if (!process.env.JWT_SECRET) {
       throw new UnauthenticatedError("process.env.JWT_SECRET is not given");
     }
 
-    // Decode token
     // Throws an err if expired
-    console.log("last log:");
-    decoded = await jwt.decode(token);
+    decoded = await jwt.verify(token, process.env.JWT_SECRET);
 
-    if (!process.env.JWT_SECRET) {
-      throw new UnauthenticatedError("process.env.JWT_SECRET is not given");
-    }
-    // @ts-ignore
     const { user_id, email } = decoded;
 
-    // If the token is expired
-    if (decoded.exp * 1000 < Date.now()) {
-      token = jwt.sign(
-        { email: email, user_id: user_id },
-        process.env.JWT_SECRET,
-        {
-          expiresIn: "30d",
-        }
-      );
-    }
+    // @ts-ignore
+    res.locals.user = { user_id, email };
 
-    decoded = await jwt.verify(token, process.env.JWT_SECRET);
+    // Go to controller
+    next();
   } catch (err) {
     console.log(err);
   }
-
-  // @ts-ignore
-  res.locals.user = { user_id, email };
-
-  // Go to controller
-  next();
 };
 
 export { authenticationMiddleware };
