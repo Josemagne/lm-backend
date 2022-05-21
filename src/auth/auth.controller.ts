@@ -67,6 +67,8 @@ async function register(req: Request, res: Response, ) {
 
     if (isEmail) user.user_id = nanoid();
     else return res.status(401).json({reason: "E-Mail is not an E-Mail.", result: "failure"})
+
+    // TODO Sanitize
     
     // Check if password is a string
     const passwordSchema = string().min(7);   
@@ -93,8 +95,6 @@ async function register(req: Request, res: Response, ) {
           return res.status(409).json({reason: "User already exists", result: "failure"});
       }
   } else return res.status(401).json({reason: "Password is corrupt", result: "failure"})
-
-  console.log("Here")
 
     await getRepository(User).save(user).
         catch((err) => {

@@ -15,6 +15,7 @@ import summaryRouter from "./routes/summary.router"
 import flashcardRouter from "./routes/flashcard.router"
 import authorizeRouter from "./routes/authorize.router";
 import noteRouter from "./routes/note.router"
+import subjectRouter from "./routes/subject.router"
 import dotenv from "dotenv"
 dotenv.config();
 
@@ -52,10 +53,10 @@ createConnection(
     app.use("/api/v1", chapterRouter);
     app.use("/api/v1/auth", authRouter)
     app.use("/api/v1/author", authorRouter);
-    //TODO 
     app.use("api/v1", summaryRouter)
     app.use("/api/v1", flashcardRouter)
     app.use("/api/v1", noteRouter);
+    app.use("/api/v1", subjectRouter);
   //  app.use("api/v1/question", questionRouter)
   //  app.use("api/v1/word", wordRouter)
 

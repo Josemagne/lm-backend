@@ -16,7 +16,7 @@ const authenticationMiddleware = async (req: Request, res: Response, next: NextF
     }
 
     // Get the token
-    const token = authHeader.split(' ')[1];
+    let token = authHeader.split(' ')[1];
 
     try {
 
@@ -25,12 +25,22 @@ const authenticationMiddleware = async (req: Request, res: Response, next: NextF
         }
 
         // Decode token
-        const decoded = jwt.verify(token, process.env.JWT_SECRET)
-
-        console.log("decoded: ", decoded)
-
+        let decoded = jwt.verify(token, process.env.JWT_SECRET)
         // @ts-ignore
         const { user_id, email } = decoded;
+
+        // NOTE If the jwt expired we want to renew it!
+        // @ts-ignore
+      if (decoded.exp * 1000 < Date.now()) {
+      token = jwt.sign({ email: email, user_id: user_id}, process.env.JWT_SECRET, {
+          expiresIn: '30d'
+      })
+        
+      }
+
+      decoded = jwt.verify(token, process.env.JWT_SECRET)
+
+        // @ts-ignore
         res.locals.user = { user_id, email }
 
         // Go to controller

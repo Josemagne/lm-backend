@@ -5,7 +5,8 @@ import Author from "./Author"
 import Flashcard from "./Flashcard/Flashcard"
 import Summary from "./Summary/Summary"
 import Note from "./Note"
+import Subject from "./Subject"
 //import Summary from "./Summary/Summary";
 
 
-export {Book, Chapter, User, Author, Flashcard, Summary, Note};
+export {Book, Chapter, User, Author, Flashcard, Summary, Note, Subject};
