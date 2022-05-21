@@ -55,8 +55,6 @@ const authenticationMiddleware = async (
       );
     }
 
-    // Go to controller
-    next();
     decoded = await jwt.verify(token, process.env.JWT_SECRET);
   } catch (err) {
     console.log(err);
