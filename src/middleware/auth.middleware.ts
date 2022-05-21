@@ -7,6 +7,8 @@ dotenv.config()
 
 // @ts-ignore
 const authenticationMiddleware = async (req: Request, res: Response, next: NextFunction) => {
+  let decoded: any;
+  let token: any;
     const authHeader = req.headers.authorization;
 
     // TODO Must have a token after Bearer
@@ -16,7 +18,7 @@ const authenticationMiddleware = async (req: Request, res: Response, next: NextF
     }
 
     // Get the token
-    let token = authHeader.split(' ')[1];
+    token = authHeader.split(' ')[1];
 
     try {
 
@@ -25,20 +27,13 @@ const authenticationMiddleware = async (req: Request, res: Response, next: NextF
         }
 
         // Decode token
-        let decoded = jwt.verify(token, process.env.JWT_SECRET)
+      // Throws an err if expired
+        decoded = jwt.verify(token, process.env.JWT_SECRET)
         // @ts-ignore
         const { user_id, email } = decoded;
 
         // NOTE If the jwt expired we want to renew it!
         // @ts-ignore
-      if (decoded.exp * 1000 < Date.now()) {
-      token = jwt.sign({ email: email, user_id: user_id}, process.env.JWT_SECRET, {
-          expiresIn: '30d'
-      })
-        
-      }
-
-      decoded = jwt.verify(token, process.env.JWT_SECRET)
 
         // @ts-ignore
         res.locals.user = { user_id, email }
@@ -49,6 +44,20 @@ const authenticationMiddleware = async (req: Request, res: Response, next: NextF
 
     catch (err) {
         console.log(err);
+
+        if (!process.env.JWT_SECRET) {
+            throw new UnauthenticatedError("process.env.JWT_SECRET is not given");
+        }
+        const { user_id, email } = decoded;
+      // If the token 
+      if (decoded.exp * 1000 < Date.now()) {
+      token = jwt.sign({ email: email, user_id: user_id}, process.env.JWT_SECRET, {
+          expiresIn: '30d'
+      })
+        
+      }
+
+      decoded = jwt.verify(token, process.env.JWT_SECRET)
     }
 
 }
